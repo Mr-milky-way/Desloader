@@ -1,0 +1,42 @@
+{
+  "name": "DesLoader for Desmos",
+  "description": "DesLoader Adds all types of tools to load things into Desmos. NEEDS TO BE USED WITH DESMODDER",
+  "manifest_version": 3,
+  "version": "0.0.1",
+  "icons": {
+  },
+  "action": {
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.desmos.com/calculator*",
+        "*://*.desmos.com/geometry*",
+        "*://*.desmos.com/3d*"
+      ],
+      "run_at": "document_start",
+      "js": ["script.js"],
+      "all_frames": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["script.js","injected.js"],
+      "matches": ["*://*.desmos.com/*"]
+    }
+  ],
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "ruleset_1",
+        "enabled": true,
+        "path": "net_request_rules.json"
+      }
+    ]
+  },
+  "permissions": ["storage", "declarativeNetRequest"],
+  "host_permissions": ["https://*.desmos.com/*"],
+  "externally_connectable": {
+    "matches": ["https://*.desmos.com/*"]
+  }
+}
