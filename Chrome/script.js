@@ -20,7 +20,8 @@ function run() {
         div.innerHTML = `
             <button onclick="downloadState(Calc)">Save State</button>
             <input type="file" id="loadState" accept=".des" />
-            <input type="file" id="loadOBJ" accept=".obj" />`;
+            <input type="file" id="loadOBJ" accept=".obj" />
+            <input type="file" id="loadOBJ_faster" accept=".obj" />`;
         div.style.position = 'absolute';
         div.style.top = '10px';
         div.style.left = '17rem';

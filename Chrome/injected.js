@@ -36,7 +36,6 @@ document.getElementById("loadOBJ").addEventListener("change", e => {
 
     reader.onload = (OBJ) => {
         const text = OBJ.target.result;
-        console.log(text);
         const lines = text.split('\n');
         const Vertexes = lines.filter(line => line.startsWith('v '));
         for (let i = 0; i < Vertexes.length; i++) {
@@ -46,11 +45,31 @@ document.getElementById("loadOBJ").addEventListener("change", e => {
             Vlines.push("(" + Vline[0], Vline[1], Vline[2] + ")")
             Vertexes[i] = Vlines
         }
-        console.log(Vertexes)
         const Faces = lines.filter(line => line.startsWith('f'));
-        console.log(Faces)
+        Facess = [];
+        Output = [];
+        Loop = 0;
         if (Faces.length >= 10000) {
-            alert("Too many Triangles");
+            for (let i = 0; Faces.length > i; i++) {
+                let Flines = []
+                Fline = Faces[i].substr(2)
+                Fline = Fline.split(' ');
+                Fline1 = Fline[0].split('//');
+                Fline2 = Fline[1].split('//');
+                Fline3 = Fline[2].split('//');
+                Flines.push("\\operatorname{triangle}(" + Vertexes[parseInt(Fline1) - 1] + "," + Vertexes[parseInt(Fline2) - 1] + "," + Vertexes[parseInt(Fline3) - 1] + ")")
+                Facess[i - Loop * 10000] = Flines
+                if (i == 0 || i == 1) {
+                } else if ((i + 1) % 10000 == 0) {
+                    Output[Loop] = Facess.join()
+                    Loop++;
+                    Facess.length = 0;
+                } else if (i + 1 == Faces.length) {
+                    Output[Loop] = Facess.join()
+                    Loop++;
+                    Facess.length = 0;
+                }
+            }
         } else {
             for (let i = 0; Faces.length > i; i++) {
                 Flines = []
@@ -60,26 +79,121 @@ document.getElementById("loadOBJ").addEventListener("change", e => {
                 Fline2 = Fline[1].split('//');
                 Fline3 = Fline[2].split('//');
                 Flines.push("\\operatorname{triangle}(" + Vertexes[parseInt(Fline1) - 1] + "," + Vertexes[parseInt(Fline2) - 1] + "," + Vertexes[parseInt(Fline3) - 1] + ")")
-                console.log(Flines)
                 Faces[i] = Flines
+                Output[0] = Faces.join()
             }
         }
-        Output = Faces.join()
-        console.log(Output)
-        folderId = getRandomInt(1, 100);
+        console.log(Loop);
+        console.log(Output[0]);
+        folderId = getRandomInt(1, 10000);
         const state = Calc.getState();
-        console.log("Done" + Output)
         state.expressions.list.push({
             type: "folder",
             id: folderId.toString(),
             collapsed: true
+        })
+        if (0 == Loop) {
+            state.expressions.list.push({
+                type: "expression",
+                id: getRandomInt(1, 10000).toString(),
+                folderId: folderId.toString(),
+                color: "#c74440",
+                latex: Output[0],
+            });
+        } else {
+            for (let i = 0; i < Loop; i++)
+                state.expressions.list.push({
+                    type: "expression",
+                    id: getRandomInt(1, 10000).toString(),
+                    folderId: folderId.toString(),
+                    color: "#c74440",
+                    latex: Output[i],
+                });
+        }
+        Calc.setState(state)
+    }
+    reader.readAsText(OBJ);
+});
+
+
+
+document.getElementById("loadOBJ_faster").addEventListener("change", e => {
+    const OBJ = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (OBJ) => {
+        const text = OBJ.target.result;
+        const lines = text.split('\n');
+        const Vertexes = lines.filter(line => line.startsWith('v '));
+        for (let i = 0; i < Vertexes.length; i++) {
+            Vlines = []
+            Vline = Vertexes[i].substr(2)
+            Vline = Vline.split(' ');
+            Vlines.push("(" + Vline[0], Vline[1], Vline[2] + ")")
+            Vertexes[i] = Vlines
+        }
+        const Faces = lines.filter(line => line.startsWith('f'));
+        Facess = [];
+        Output = [];
+        Output[1] = Vertexes.join()
+        if (Faces.length >= 10000 || Vertexes.length >= 10000) {
+            alert("To much data")
+        } else {
+            for (let i = 0; Faces.length > i; i++) {
+                Flines = []
+                Fline = Faces[i].substr(2)
+                Fline = Fline.split(' ');
+                Fline1 = Fline[0].split('//');
+                Fline2 = Fline[1].split('//');
+                Fline3 = Fline[2].split('//');
+                Flines.push("(" + parseInt(Fline1) + "," + parseInt(Fline2) + "," + parseInt(Fline3) + ")")
+                Faces[i] = Flines
+            }
+        }
+        Output[0] = Faces.join()
+        console.log(Output[0]);
+        console.log(Output[1]);
+        console.log(Faces.length);
+        console.log(Vertexes.length);
+        let f = getRandomInt(1, 10000).toString()
+        let v = getRandomInt(1, 10000).toString()
+        let folder1Id = getRandomInt(1, 10000);
+        let folder2Id = getRandomInt(1, 10000);
+        const state = Calc.getState();
+        state.expressions.list.push({
+            type: "folder",
+            id: folder1Id.toString(),
+            title: "Faces and Vertexes",
+            collapsed: true
         });
         state.expressions.list.push({
             type: "expression",
-            id: getRandomInt(1, 100).toString(),
-            folderId: folderId.toString(),
+            id: getRandomInt(1, 10000).toString(),
+            folderId: folder1Id.toString(),
             color: "#c74440",
-            latex: Output,
+            latex: "V_{" + v + "}=[" + Output[0] + "]",
+            hidden: true
+        });
+        state.expressions.list.push({
+            type: "expression",
+            id: getRandomInt(1, 10000).toString(),
+            folderId: folder1Id.toString(),
+            color: "#c74440",
+            latex: "F_{" + f + "}=[" + Output[1] + "]",
+            hidden: true
+        });
+        state.expressions.list.push({
+            type: "folder",
+            id: folder2Id.toString(),
+            title: "Main bit",
+            collapsed: true
+        });
+        state.expressions.list.push({
+            type: "expression",
+            id: getRandomInt(1, 10000).toString(),
+            folderId: folder2Id.toString(),
+            color: "#c74440",
+            latex: "\\operatorname{triangle}((F_{" + f + "}[V_{" + v + "}.x]),F_{" + f + "}[V_{" + v + "}.y],F_{" + f + "}[V_{" + v + "}.z])",
         });
         Calc.setState(state)
     }
