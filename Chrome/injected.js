@@ -10,10 +10,10 @@ function downloadState(calc3d, filename = "Graph.des") {
 
 document.getElementById("loadState").addEventListener("change", e => {
     const f = e.target.files[0];
-    const r = new FileReader();
-    r.onload = () => {
+    const reader = new FileReader();
+    reader.onload = () => {
         try {
-            const state = JSON.parse(r.result);
+            const state = JSON.parse(reader.result);
             Calc.setState(state, { allowUndo: true });
             alert("State loaded.");
         } catch (err) {
@@ -21,5 +21,67 @@ document.getElementById("loadState").addEventListener("change", e => {
             alert("Invalid state file");
         }
     };
-    r.readAsText(f);
+    reader.readAsText(f);
+});
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+document.getElementById("loadOBJ").addEventListener("change", e => {
+    const OBJ = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (OBJ) => {
+        const text = OBJ.target.result;
+        console.log(text);
+        const lines = text.split('\n');
+        const Vertexes = lines.filter(line => line.startsWith('v '));
+        for (let i = 0; i < Vertexes.length; i++) {
+            Vlines = []
+            Vline = Vertexes[i].substr(2)
+            Vline = Vline.split(' ');
+            Vlines.push("(" + Vline[0], Vline[1], Vline[2] + ")")
+            Vertexes[i] = Vlines
+        }
+        console.log(Vertexes)
+        const Faces = lines.filter(line => line.startsWith('f'));
+        console.log(Faces)
+        if (Faces.length >= 10000) {
+            alert("Too many Triangles");
+        } else {
+            for (let i = 0; Faces.length > i; i++) {
+                Flines = []
+                Fline = Faces[i].substr(2)
+                Fline = Fline.split(' ');
+                Fline1 = Fline[0].split('//');
+                Fline2 = Fline[1].split('//');
+                Fline3 = Fline[2].split('//');
+                Flines.push("\\operatorname{triangle}(" + Vertexes[parseInt(Fline1) - 1] + "," + Vertexes[parseInt(Fline2) - 1] + "," + Vertexes[parseInt(Fline3) - 1] + ")")
+                console.log(Flines)
+                Faces[i] = Flines
+            }
+        }
+        Output = Faces.join()
+        console.log(Output)
+        folderId = getRandomInt(1, 100);
+        const state = Calc.getState();
+        console.log("Done" + Output)
+        state.expressions.list.push({
+            type: "folder",
+            id: folderId.toString(),
+            collapsed: true
+        });
+        state.expressions.list.push({
+            type: "expression",
+            id: getRandomInt(1, 100).toString(),
+            folderId: folderId.toString(),
+            color: "#c74440",
+            latex: Output,
+        });
+        Calc.setState(state)
+    }
+    reader.readAsText(OBJ);
 });
