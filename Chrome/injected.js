@@ -1,3 +1,22 @@
+const maindiv = document.getElementById("main_bit")
+const showdiv = document.getElementById("show_bit")
+const ArrayCheckBox = document.getElementById("ArrayCheckBox")
+const ArrayName = document.getElementById("ArrayName")
+const ArrayCount = document.getElementById("ArrayCount")
+const colorVar = document.getElementById("color")
+
+showdiv.style.display = 'none';
+
+function hide() {
+    maindiv.style.display = 'none';
+    showdiv.style.display = null;
+}
+
+function show() {
+    maindiv.style.display = null;
+    showdiv.style.display = 'none';
+}
+
 function downloadState(calc3d, filename = "Graph.des") {
     const state = calc3d.getState();
     const blob = new Blob([JSON.stringify(state)], { type: "application/json" });
@@ -151,10 +170,6 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
             }
         }
         Output[0] = Faces.join()
-        console.log(Output[0]);
-        console.log(Output[1]);
-        console.log(Faces.length);
-        console.log(Vertexes.length);
         let f = getRandomInt(1, 10000).toString()
         let v = getRandomInt(1, 10000).toString()
         let folder1Id = getRandomInt(1, 10000);
@@ -188,14 +203,66 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
             title: "Main bit",
             collapsed: true
         });
-        state.expressions.list.push({
-            type: "expression",
-            id: getRandomInt(1, 10000).toString(),
-            folderId: folder2Id.toString(),
-            color: "#c74440",
-            latex: "\\operatorname{triangle}((F_{" + f + "}[V_{" + v + "}.x]),F_{" + f + "}[V_{" + v + "}.y],F_{" + f + "}[V_{" + v + "}.z])",
-        });
+        if (ArrayCheckBox.checked == true) {
+            for (let i = 0; i < parseInt(ArrayCount.value); i++) {
+                state.expressions.list.push({
+                    type: "expression",
+                    id: getRandomInt(1, 10000).toString(),
+                    folderId: folder2Id.toString(),
+                    color: "#c74440",
+                    latex: "\\operatorname{triangle}(F_{" + f + "}[V_{" + v + "}.x]+" + ArrayName.value + "["+ (i+1) + "]" + ",F_{" + f + "}[V_{" + v + "}.y]+" + ArrayName.value + "["+ (i+1) + "]" + ",F_{" + f + "}[V_{" + v + "}.z]+" + ArrayName.value + "["+ (i+1) + "]" + ")",
+                    colorLatex: colorVar.value,
+                });
+            }
+        } else {
+            state.expressions.list.push({
+                type: "expression",
+                id: getRandomInt(1, 10000).toString(),
+                folderId: folder2Id.toString(),
+                color: "#c74440",
+                latex: "\\operatorname{triangle}((F_{" + f + "}[V_{" + v + "}.x]),F_{" + f + "}[V_{" + v + "}.y],F_{" + f + "}[V_{" + v + "}.z])",
+            });
+        }
         Calc.setState(state)
     }
     reader.readAsText(OBJ);
+});
+
+
+
+document.getElementById("LoadArray").addEventListener("change", e => {
+    const Array = e.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = (Array) => {
+        const text = Array.target.result;
+        const lines = text.split('\n');
+        for (let i = 0; i < lines.length; i++) {
+            Vlines = []
+            Vline = lines[i].split(',');
+            console.log(Vline);
+            Vlines.push("(" + Vline[0], Vline[1], Vline[2] + ")")
+            lines[i] = Vlines
+        }
+
+        Output = lines.join()
+        let folderId = getRandomInt(1, 10000);
+        const state = Calc.getState();
+        state.expressions.list.push({
+            type: "folder",
+            id: folderId.toString(),
+            title: ArrayName.value,
+            collapsed: true
+        });
+        state.expressions.list.push({
+            type: "expression",
+            id: getRandomInt(1, 10000).toString(),
+            folderId: folderId.toString(),
+            color: "#c74440",
+            latex: ArrayName.value +"=[" + Output + "]",
+            hidden: true
+        });
+        Calc.setState(state)
+    }
+    reader.readAsText(Array);
 });
