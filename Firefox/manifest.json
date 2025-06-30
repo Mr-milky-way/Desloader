@@ -1,0 +1,36 @@
+{
+    "name": "DesLoader for Desmos",
+    "description": "DesLoader Adds all types of tools to load things into Desmos. NEEDS TO BE USED WITH DESMODDER",
+    "manifest_version": 2,
+    "version": "0.0.7",
+    "icons": {
+        "48": "DesLoaderIcon_48.png"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.desmos.com/calculator*",
+                "https://*.desmos.com/geometry*",
+                "https://*.desmos.com/3d*"
+            ],
+            "run_at": "document_start",
+            "js": ["script.js"],
+            "all_frames": true
+        }
+    ],
+    "web_accessible_resources": [
+        "script.js",
+        "injected.js"
+    ],
+    "permissions": [
+        "https://*.desmos.com/*",
+        "storage",
+        "webRequest",
+        "webRequestBlocking"
+    ],
+    "browser_specific_settings": {
+        "gecko": {
+            "id": "DesLoader@Mr-milky-way.github.io"
+        }
+    }
+}
