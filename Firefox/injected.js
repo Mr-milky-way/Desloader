@@ -1,11 +1,15 @@
 const maindiv = document.getElementById("main_bit")
 const showdiv = document.getElementById("show_bit")
+const UVmapCheckBox = document.getElementById("UVmapCheckBox")
 const PosArrayCheckBox = document.getElementById("PosArrayCheckBox")
 const ArrayName = document.getElementById("ArrayName")
 const Array1Name = document.getElementById("Array1Name")
 const ArrayCount = document.getElementById("ArrayCount")
 const colorVar = document.getElementById("color")
 const RotArrayCheckBox = document.getElementById("RotArrayCheckBox")
+UVs = null;
+UVmap = [];
+rbgValues = [];
 
 maindiv.style.display = 'none';
 showdiv.style.display = null;
@@ -147,6 +151,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
         const text = OBJ.target.result;
         const lines = text.split('\n');
         const Vertexes = lines.filter(line => line.startsWith('v '));
+        UVs = lines.filter(line => line.startsWith('vt '));
         for (let i = 0; i < Vertexes.length; i++) {
             Vlines = []
             Vline = Vertexes[i].substr(2)
@@ -154,22 +159,46 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
             Vlines.push("(" + Vline[0], Vline[1], Vline[2] + ")")
             Vertexes[i] = Vlines
         }
+        for (let i = 0; i < UVs.length; i++) {
+            Vlines = []
+            Vline = UVs[i].substr(3)
+            Vline = Vline.split(' ');
+            Vlines.push(Vline[0], 1-Vline[1])
+            UVs[i] = Vlines
+        }
         const Faces = lines.filter(line => line.startsWith('f'));
-        Facess = [];
+        UVmap = []
         Output = [];
         Output[1] = Vertexes.join()
         if (Faces.length >= 10000 || Vertexes.length >= 10000) {
             alert("To much data")
         } else {
-            for (let i = 0; Faces.length > i; i++) {
-                Flines = []
-                Fline = Faces[i].substr(2)
-                Fline = Fline.split(' ');
-                Fline1 = Fline[0].split('//');
-                Fline2 = Fline[1].split('//');
-                Fline3 = Fline[2].split('//');
-                Flines.push("(" + parseInt(Fline1) + "," + parseInt(Fline2) + "," + parseInt(Fline3) + ")")
-                Faces[i] = Flines
+            if (UVmapCheckBox.checked == true) {
+                for (let i = 0; Faces.length > i; i++) {
+                    Fnlines = []
+                    Flines = []
+                    Fline = Faces[i].substr(2)
+                    Fline = Fline.split(' ');
+                    Fline1 = Fline[0].split('/');
+                    Fline2 = Fline[1].split('/');
+                    Fline3 = Fline[2].split('/');
+                    Flines.push("(" + parseInt(Fline1[0]) + "," + parseInt(Fline2[0]) + "," + parseInt(Fline3[0]) + ")")
+                    Fnlines.push(UVs[parseInt(Fline1[1]) - 1].map(Number), UVs[parseInt(Fline2[1]) - 1].map(Number), UVs[parseInt(Fline3[1]) - 1].map(Number))
+                    Faces[i] = Flines
+                    UVmap[i] = Fnlines
+                }
+            } else {
+                for (let i = 0; Faces.length > i; i++) {
+                    Fnlines = []
+                    Flines = []
+                    Fline = Faces[i].substr(2)
+                    Fline = Fline.split(' ');
+                    Fline1 = Fline[0].split('/');
+                    Fline2 = Fline[1].split('/');
+                    Fline3 = Fline[2].split('/');
+                    Flines.push("(" + parseInt(Fline1[0]) + "," + parseInt(Fline2[0]) + "," + parseInt(Fline3[0]) + ")")
+                    Faces[i] = Flines
+                }
             }
         }
         Output[0] = Faces.join()
@@ -206,19 +235,17 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
             title: "Main bit",
             collapsed: true
         });
-        if(PosArrayCheckBox.checked == true && RotArrayCheckBox.checked == true)
-        {
+        if (PosArrayCheckBox.checked == true && RotArrayCheckBox.checked == true) {
             for (let i = 0; i < parseInt(ArrayCount.value); i++) {
                 state.expressions.list.push({
                     type: "expression",
                     id: getRandomInt(1, 10000).toString(),
                     folderId: folder2Id.toString(),
                     color: "#c74440",
-                    latex: "\\operatorname{triangle}((((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)-\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)-\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y))))[V_{" + v + "}.x]+" + ArrayName.value + "["+ (i+1) + "],(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)-\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)-\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y))))[V_{" + v + "}.y]+" + ArrayName.value + "["+ (i+1) + "],(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)-\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)-\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y))))[V_{" + v + "}.z]+" + ArrayName.value + "["+ (i+1) + "])",
+                    latex: "\\operatorname{triangle}((((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)-\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)-\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y))))[V_{" + v + "}.x]+" + ArrayName.value + "[" + (i + 1) + "],(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)-\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)-\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y))))[V_{" + v + "}.y]+" + ArrayName.value + "[" + (i + 1) + "],(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)-\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)-\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y))))[V_{" + v + "}.z]+" + ArrayName.value + "[" + (i + 1) + "])",
                     colorLatex: colorVar.value,
                 });
             }
-
         } else if (PosArrayCheckBox.checked == true) {
             for (let i = 0; i < parseInt(ArrayCount.value); i++) {
                 state.expressions.list.push({
@@ -226,22 +253,22 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                     id: getRandomInt(1, 10000).toString(),
                     folderId: folder2Id.toString(),
                     color: "#c74440",
-                    latex: "\\operatorname{triangle}(F_{" + f + "}[V_{" + v + "}.x]+" + ArrayName.value + "["+ (i+1) + "]" + ",F_{" + f + "}[V_{" + v + "}.y]+" + ArrayName.value + "["+ (i+1) + "]" + ",F_{" + f + "}[V_{" + v + "}.z]+" + ArrayName.value + "["+ (i+1) + "]" + ")",
+                    latex: "\\operatorname{triangle}(F_{" + f + "}[V_{" + v + "}.x]+" + ArrayName.value + "[" + (i + 1) + "]" + ",F_{" + f + "}[V_{" + v + "}.y]+" + ArrayName.value + "[" + (i + 1) + "]" + ",F_{" + f + "}[V_{" + v + "}.z]+" + ArrayName.value + "[" + (i + 1) + "]" + ")",
                     colorLatex: colorVar.value,
                 });
             }
-        } else if (RotArrayCheckBox.checked == true){
+        } else if (RotArrayCheckBox.checked == true) {
             for (let i = 0; i < parseInt(ArrayCount.value); i++) {
                 state.expressions.list.push({
                     type: "expression",
                     id: getRandomInt(1, 10000).toString(),
                     folderId: folder2Id.toString(),
                     color: "#c74440",
-                    latex: "\\operatorname{triangle}((((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)-\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)-\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y))))[V_{" + v + "}.x],(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)-\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)-\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y))))[V_{" + v + "}.y],(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)-\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)+\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)+\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\sin(" + Array1Name.value + "["+ (i+1) + "].y)\\sin(" + Array1Name.value + "["+ (i+1) + "].z)-\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cos(" + Array1Name.value + "["+ (i+1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "["+ (i+1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "["+ (i+1) + "].y))))[V_{" + v + "}.z])",
+                    latex: "\\operatorname{triangle}((((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)-\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)-\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y))))[V_{" + v + "}.x],(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)-\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)-\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y))))[V_{" + v + "}.y],(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)-\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)+\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z))),(((F_{" + f + "}.x)\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+F_{" + f + "}.y(\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)+\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z))+F_{" + f + "}.z(\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)\\sin(" + Array1Name.value + "[" + (i + 1) + "].z)-\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cos(" + Array1Name.value + "[" + (i + 1) + "].z)))),((-(F_{" + f + "}.x)\\cdot\\sin(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.y\\cos(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y)+F_{" + f + "}.z\\sin(" + Array1Name.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + Array1Name.value + "[" + (i + 1) + "].y))))[V_{" + v + "}.z])",
                     colorLatex: colorVar.value,
                 });
             }
-        }   else {
+        } else {
             state.expressions.list.push({
                 type: "expression",
                 id: getRandomInt(1, 10000).toString(),
@@ -286,10 +313,169 @@ document.getElementById("LoadArray").addEventListener("change", e => {
             id: getRandomInt(1, 10000).toString(),
             folderId: folderId.toString(),
             color: "#c74440",
-            latex: ArrayName.value +"=[" + Output + "]",
+            latex: ArrayName.value + "=[" + Output + "]",
             hidden: true
         });
         Calc.setState(state)
     }
     reader.readAsText(Array);
+});
+
+
+
+
+function getAverageColorOfTriangle(ctx, triangle, imgWidth, imgHeight) {
+    const [[nx1, ny1], [nx2, ny2], [nx3, ny3]] = triangle;
+
+    const x1 = nx1 * imgWidth;
+    const y1 = ny1 * imgHeight;
+    const x2 = nx2 * imgWidth;
+    const y2 = ny2 * imgHeight;
+    const x3 = nx3 * imgWidth;
+    const y3 = ny3 * imgHeight;
+
+    // Calculate bounding box
+    const minX = Math.max(0, Math.floor(Math.min(x1, x2, x3)));
+    const maxX = Math.min(imgWidth, Math.ceil(Math.max(x1, x2, x3)));
+    const minY = Math.max(0, Math.floor(Math.min(y1, y2, y3)));
+    const maxY = Math.min(imgHeight, Math.ceil(Math.max(y1, y2, y3)));
+
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    // If bounding box is zero area, return null or fallback
+    if (width <= 0 || height <= 0) return [0, 0, 0];
+
+    const imgData = ctx.getImageData(minX, minY, width, height);
+    const data = imgData.data;
+
+    let r = 0, g = 0, b = 0, count = 0;
+
+    for (let j = 0; j < height; j++) {
+        for (let i = 0; i < width; i++) {
+            const px = minX + i;
+            const py = minY + j;
+
+            if (pointInTriangle(px, py, x1, y1, x2, y2, x3, y3)) {
+                const idx = (j * width + i) * 4;
+                r += data[idx];
+                g += data[idx + 1];
+                b += data[idx + 2];
+                count++;
+            }
+        }
+    }
+
+    if (count === 0) {
+        // Fallback to sampling centroid pixel if no pixels detected within triangle
+        return sampleTriangleCentroid(ctx, x1, y1, x2, y2, x3, y3, imgWidth, imgHeight);
+    }
+
+    return [Math.round(r / count), Math.round(g / count), Math.round(b / count)];
+}
+
+function sampleTriangleCentroid(ctx, x1, y1, x2, y2, x3, y3, imgWidth, imgHeight) {
+    const cx = Math.round((x1 + x2 + x3) / 3);
+    const cy = Math.round((y1 + y2 + y3) / 3);
+
+    if (cx >= 0 && cx < imgWidth && cy >= 0 && cy < imgHeight) {
+        const data = ctx.getImageData(cx, cy, 1, 1).data;
+        return [data[0], data[1], data[2]];
+    }
+
+    // If centroid is outside image, return black or handle as needed
+    return [0, 0, 0];
+}
+
+function pointInTriangle(px, py, x1, y1, x2, y2, x3, y3) {
+    // Barycentric coordinate method
+    const dX = px - x3;
+    const dY = py - y3;
+    const dX21 = x3 - x2;
+    const dY12 = y2 - y3;
+    const D = dY12 * (x1 - x3) + dX21 * (y1 - y3);
+    const s = dY12 * dX + dX21 * dY;
+    const t = (y3 - y1) * dX + (x1 - x3) * dY;
+
+    if (D < 0) return s <= 0 && t <= 0 && s + t >= D;
+    return s >= 0 && t >= 0 && s + t <= D;
+}
+
+
+
+
+document.getElementById('upload').addEventListener('change', async function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+
+    rbgValues = []
+    const img = new Image();
+    img.onload = function () {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        Output = null;
+        for (let i = 0; i < UVmap.length; i++) {
+            const triangle = UVmap[i];
+            const avgColor = getAverageColorOfTriangle(ctx, triangle, img.width, img.height) + "";
+            rbgValues[i] = avgColor
+        }
+        R = []
+        G = []
+        B = []
+        for (let i = 0; i < rbgValues.length; i++) {
+            R[i] = rbgValues[i].split(',')[0];
+            G[i] = rbgValues[i].split(',')[1];
+            B[i] = rbgValues[i].split(',')[2];
+        }
+        let r = getRandomInt(1, 10000).toString()
+        let g = getRandomInt(1, 10000).toString()
+        let b = getRandomInt(1, 10000).toString()
+        let c = getRandomInt(1, 10000).toString()
+        let folderId = getRandomInt(1, 10000);
+        const state = Calc.getState();
+        state.expressions.list.push({
+            type: "folder",
+            id: folderId.toString(),
+            title: ArrayName.value,
+            collapsed: true
+        });
+        state.expressions.list.push({
+            type: "expression",
+            id: getRandomInt(1, 10000).toString(),
+            folderId: folderId.toString(),
+            color: "#c74440",
+            latex: "R_{" + r + "}=[" + R + "]",
+            hidden: true
+        });
+        state.expressions.list.push({
+            type: "expression",
+            id: getRandomInt(1, 10000).toString(),
+            folderId: folderId.toString(),
+            color: "#c74440",
+            latex: "G_{" + g + "}=[" + G + "]",
+            hidden: true
+        });
+        state.expressions.list.push({
+            type: "expression",
+            id: getRandomInt(1, 10000).toString(),
+            folderId: folderId.toString(),
+            color: "#c74440",
+            latex: "B_{" + b + "}=[" + B + "]",
+            hidden: true
+        });
+        state.expressions.list.push({
+            type: "expression",
+            id: getRandomInt(1, 10000).toString(),
+            color: "#c74440",
+            latex: "C_{" + c + "}=\\operatorname{rgb}(R_{" + r + "},G_{" + g + "},B_{" + b + "})",
+            hidden: true
+        });
+        Calc.setState(state)
+    };
+    img.src = URL.createObjectURL(file);
 });
