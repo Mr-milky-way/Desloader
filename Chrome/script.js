@@ -18,18 +18,19 @@ function run() {
         const div = document.createElement('div');
         div.innerHTML = `
             <div id="main_bit">
+                <h3>Tools</h3>
                 <button onclick="hide()">Hide</button>
                 <h4>Save State <button onclick="downloadState(Calc)">Save State</button></h4>
                 <h4>Load State <input type="file" id="loadState" accept=".des" /></h4>
                 <h4>Color <input type="text" id="color" placeholder="Color Variable Name"></h4>
                 <h4>Load OBJ <input type="file" id="loadOBJ" accept=".obj" /></h4>
                 <h4>Load OBJ Optimized <input type="file" id="loadOBJ_faster" accept=".obj" /></h4>
-                <h5>Load OBJ Optimized with array for placement? Do all this before uploading file. <input type="checkbox" id="PosArrayCheckBox"></h5>
+                <h5>Load OBJ Optimized with array for Placement? Do all this before uploading file. <input type="checkbox" id="PosArrayCheckBox"></h5>
                 <h5>Load OBJ Optimized with array for Rotations? (Only works in degrees) Do all this before uploading file. <input type="checkbox" id="RotArrayCheckBox"></h5>
-                <input type="text" id="ArrayName" placeholder="Array Name For Pos">
-                <input type="text" id="Array1Name" placeholder="Array Name For Rot">
+                <input type="text" id="ArrayName" placeholder="Array Name For Placement">
+                <input type="text" id="Array1Name" placeholder="Array Name For Rotations">
                 <input type="text" id="ArrayCount" placeholder="Array Count">
-                <h4>Load Position Array from CSV (Use the Array Name input from Pos) <input type="file" id="LoadArray" accept=".csv" /></h4>
+                <h4>Load Array from CSV (Use the Array Name input from Pos) <input type="file" id="LoadArray" accept=".csv" /></h4>
             </div>
             <div id="show_bit">
                 <button onclick="show()">Show</button>

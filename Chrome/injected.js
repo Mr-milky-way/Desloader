@@ -7,7 +7,8 @@ const ArrayCount = document.getElementById("ArrayCount")
 const colorVar = document.getElementById("color")
 const RotArrayCheckBox = document.getElementById("RotArrayCheckBox")
 
-showdiv.style.display = 'none';
+maindiv.style.display = 'none';
+showdiv.style.display = null;
 
 function hide() {
     maindiv.style.display = 'none';
