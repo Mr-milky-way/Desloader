@@ -66,4 +66,4 @@ This allows you to load a position or rotation array from a CSV file.
 
 **This is not affiliated with Desmos.**
 
-**Some code has been made with AI.**
+**Little code has been made with AI.**
