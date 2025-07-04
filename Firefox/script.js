@@ -105,13 +105,16 @@ function run() {
                 <h4>Load OBJ <input class="file1" type="file" id="loadOBJ" accept=".obj" /></h4>
                 <h5>Load OBJ Optimized/Load OBJ with UV map? Do all this before uploading file. <input type="checkbox" id="UVmapCheckBox"></h5>
                 <h4>Load OBJ Optimized <input class="file1" type="file" id="loadOBJ_faster" accept=".obj" /></h4>
+                <h5>Reflection on the X? <input type="checkbox" id="XCheckBox"></h5>
+                <h5>Reflection on the Y? <input type="checkbox" id="YCheckBox"></h5>
+                <h5>Reflection on the Z? <input type="checkbox" id="ZCheckBox"></h5>
                 <h5>Load OBJ Optimized with array for Placement? Do all this before uploading file. <input type="checkbox" id="PosArrayCheckBox"></h5>
                 <h5>Load OBJ Optimized with array for Rotations? (Only works in degrees) Do all this before uploading file. <input type="checkbox" id="RotArrayCheckBox"></h5>
                 <input class="text1" type="text" id="ArrayName" placeholder="Array Name For Placement">
                 <input class="text1" type="text" id="Array1Name" placeholder="Array Name For Rotations">
                 <input class="text1" type="text" id="ArrayCount" placeholder="Array Count">
+                <h4>Input Texture File (Only work on the most recent OBJ with UV map) <input class="file1" type="file" id="upload" accept="image/png, image/jpeg" /></h4>
                 <h4>Load Array from CSV (Use the Array Name input from Placement) <input class="file1" type="file" id="LoadArray" accept=".csv" /></h4>
-                <h4>Input Texture File (Only work on the most recent OBJ Optimized with UV map) <input class="file1" type="file" id="upload" accept="image/png, image/jpeg" /></h4>
             </div>
             <div class="show" id="show_bit">
                 <button class="button1" onclick="show()">Show</button>
