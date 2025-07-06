@@ -30,7 +30,7 @@ function run() {
                     background-color:rgb(46, 114, 220);
                     border: 0px;
                     border-radius: 5px;
-                    padding: .6rem 1rem;
+                    padding: .2rem .4rem;
                 }
                 .button1:hover {
                     background-color:rgb(37, 87, 168);
@@ -48,12 +48,14 @@ function run() {
                 }
                 h4 {
                     color: rgb(255, 255, 255);
+                    font-size: clamp(8px, 0.9vw, 32px);
                 }
                 h4 .button1 {
                     color: rgb(0, 0, 0);
                 }
                 h5 {
                     color: rgb(255,255,255);
+                    font-size: clamp(6px, 0.8vw, 18px);
                 }
                 .text1 {
                     text-align: center;
@@ -63,10 +65,11 @@ function run() {
                     max-width: 600px;
                     color: rgb(255,255,255);
                     background-color: rgb(54, 54, 54);
+                    font-size: clamp(6px, 0.8vw, 19.2px);
                 }
                 .text1 input {
                     padding: 1rem;
-                    font-size: 1.2rem;
+                    font-size: clamp(6px, 0.8vw, 19.2px);
                     width: 30%;
                     max-width: 400px;
                     border-radius: 5px;
@@ -78,6 +81,7 @@ function run() {
                 .text1::placeholder {
                     color: rgb(255,255,255);
                     opacity: .8;
+                    font-size: clamp(6px, 0.8vw, 19.2px);
                 }
                 .file1 {
                     text-align: center;
@@ -93,7 +97,7 @@ function run() {
                     background-color:rgb(46, 114, 220);
                     border: 0px;
                     border-radius: 5px;
-                    padding: .6rem 1rem;
+                    padding: .2rem .4rem;
                 }
             </style>
             <div class="main" id="main_bit">
@@ -125,6 +129,7 @@ function run() {
                 <button class="button1" onclick="show()">Show</button>
             </div>`;
         div.id = 'outside bit';
+        div.style.width = '45%';
         div.style.position = 'absolute';
         div.style.top = '.3rem';
         div.style.left = '20rem';
