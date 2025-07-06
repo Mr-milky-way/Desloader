@@ -103,10 +103,13 @@ function run() {
                 <h4>Load State <input class="file1" type="file" id="loadState" accept=".des" /></h4>
                 <h4>Load OBJ <input class="file1" type="file" id="loadOBJ" accept=".obj" /></h4>
                 <h4>Load OBJ Optimized <input class="file1" type="file" id="loadOBJ_faster" accept=".obj" /></h4>
+                <h4>Input Texture File (Only work on the most recent OBJ with UV map) <input class="file1" type="file" id="upload" accept="image/png, image/jpeg" /></h4>
+                <h4>Load Array from CSV (Use the Array Name input from Placement) <input class="file1" type="file" id="LoadArray" accept=".csv" /></h4>
                 <h4>Settings for Both OBJ Optimized and normal loading</h4>
                 <h5>Load OBJ Optimized/Load OBJ with UV map? Do all this before uploading file. <input type="checkbox" id="UVmapCheckBox"></h5>
                 <h5>Color <input class="text1" type="text" id="color" placeholder="Color Variable Name"></h5>
                 <h4>Settings for Load OBJ Optimized</h4>
+                <h5>Load OBJ Optimized with over 10,000 Triangles? (Naming of the Face and Vertex Vars will be turned off)<input type="checkbox" id="RemoveTriLimitCheckBox"></h5>
                 <h5>Reflection on the X? <input type="checkbox" id="XCheckBox"></h5>
                 <h5>Reflection on the Y? <input type="checkbox" id="YCheckBox"></h5>
                 <h5>Reflection on the Z? <input type="checkbox" id="ZCheckBox"></h5>
@@ -117,8 +120,6 @@ function run() {
                 <input class="text1" type="text" id="ArrayCount" placeholder="Array Count">
                 <input class="text1" type="text" id="VertexName" placeholder="Name of Vertex Var">
                 <input class="text1" type="text" id="FaceName" placeholder="Name of Face Var">
-                <h4>Input Texture File (Only work on the most recent OBJ with UV map) <input class="file1" type="file" id="upload" accept="image/png, image/jpeg" /></h4>
-                <h4>Load Array from CSV (Use the Array Name input from Placement) <input class="file1" type="file" id="LoadArray" accept=".csv" /></h4>
             </div>
             <div class="show" id="show_bit">
                 <button class="button1" onclick="show()">Show</button>
