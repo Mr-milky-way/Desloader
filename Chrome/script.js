@@ -31,6 +31,7 @@ function run() {
                     border: 0px;
                     border-radius: 5px;
                     padding: .2rem .4rem;
+                    font-size: clamp(6px, 0.8vw, 19.2px);
                 }
                 .button1:hover {
                     background-color:rgb(37, 87, 168);
