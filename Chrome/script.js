@@ -41,6 +41,9 @@ function run() {
                     color: rgb(255, 255, 255);
                 }
                 .main {
+                    padding: 1rem;
+                    border: 0px;
+                    border-radius: 1vw;
                     background: rgb(42, 42, 42);
                     color: rgb(255,255,255);
                 }
@@ -59,6 +62,7 @@ function run() {
                     font-size: clamp(6px, 0.8vw, 18px);
                 }
                 .text1 {
+                    margin: clamp(0px, 0.2vw, 4px);
                     text-align: center;
                     border-radius: 10px;
                     border: none;
@@ -69,10 +73,9 @@ function run() {
                     font-size: clamp(6px, 0.8vw, 19.2px);
                 }
                 .text1 input {
-                    padding: 1rem;
-                    font-size: clamp(6px, 0.8vw, 19.2px);
+                    font-size: clamp(6px, 0.4vw, 18px);
                     width: 30%;
-                    max-width: 400px;
+                    max-width: 200px;
                     border-radius: 5px;
                     border: none;
                     background-color: #333;
@@ -82,7 +85,7 @@ function run() {
                 .text1::placeholder {
                     color: rgb(255,255,255);
                     opacity: .8;
-                    font-size: clamp(6px, 0.8vw, 19.2px);
+                    font-size: clamp(6px, 0.7vw, 18px);
                 }
                 .file1 {
                     text-align: center;
@@ -102,8 +105,8 @@ function run() {
                 }
             </style>
             <div class="main" id="main_bit">
-                <h3>Tools</h3>
                 <button class="button1" onclick="hide()">Hide</button>
+                <h3>Tools</h3>
                 <h4>Save State <button class="button1" onclick="downloadState(Calc)">Save State</button></h4>
                 <h4>Load State <input class="file1" type="file" id="loadState" accept=".des" /></h4>
                 <h4>Load OBJ <input class="file1" type="file" id="loadOBJ" accept=".obj" /></h4>
