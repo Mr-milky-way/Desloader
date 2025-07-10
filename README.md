@@ -21,7 +21,7 @@
 
 ## Installation
 #### Preferred: Install from Webstore (only Firefox for now)
-You can install DesLoader from the [Firefox Web Store](https://addons.mozilla.org/en-US/firefox/addon/desloader-for-desmos/). (Not yet reviewed, so you can't yet)
+You can install DesLoader from the [Firefox Web Store](https://addons.mozilla.org/en-US/firefox/addon/desloader-for-desmos/).
 
 #### Other: Install from ZIP
 For the Most Resent release install the extension from a ZIP file.
