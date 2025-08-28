@@ -1,7 +1,7 @@
 function run() {
     setTimeout(() => {
         const script = document.createElement('script');
-        script.src = chrome.runtime.getURL('injected.js');
+        script.src = chrome.runtime.getURL('https://raw.githubusercontent.com/Mr-milky-way/Desloader/refs/heads/main/Chrome/injected.js');
         script.onload = () => script.remove();
         (document.head || document.documentElement).appendChild(script);
         const div = document.createElement('div');
@@ -134,9 +134,4 @@ function run() {
     }, 1000);
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', run);
-} else {
-    run();
-}
-
+run();
