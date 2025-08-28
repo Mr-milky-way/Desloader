@@ -1,8 +1,7 @@
-function run() {
+javascript:(function(){
     setTimeout(() => {
         const script = document.createElement('script');
-        script.src = chrome.runtime.getURL('https://raw.githubusercontent.com/Mr-milky-way/Desloader/refs/heads/main/Chrome/injected.js');
-        script.onload = () => script.remove();
+        script.src = `https://cdn.jsdelivr.net/gh/Mr-milky-way/Desloader@main/Chrome/injected.js`;
         (document.head || document.documentElement).appendChild(script);
         const div = document.createElement('div');
         div.innerHTML = `
@@ -132,6 +131,4 @@ function run() {
         div.style.padding = '1px';
         document.body.appendChild(div);
     }, 1000);
-}
-
-run();
+})();
