@@ -1,8 +1,9 @@
 
 # Table of Contents
 - [Desloader](#desloader)
-    - [Installation](#installation)
-    - [How to use](#how-to-use)
+- [Demo](#demos)
+- [Installation](#installation)
+- [How to use](#how-to-use)
         - [Tools](#tools)
             - [Hide](#hide)
             - [Save State](#save-state)
@@ -18,6 +19,13 @@
 
 
 # Desloader
+
+## Demo(s)
+### State loading demo
+
+
+https://github.com/user-attachments/assets/57f4b150-efa5-4e28-8e5f-a6ba74c49dbb
+
 
 ## Installation
 #### Preferred: Install from Webstore (only Firefox for now)
