@@ -4,18 +4,17 @@
 - [Demo](#demos)
 - [Installation](#installation)
 - [How to use](#how-to-use)
-        - [Tools](#tools)
-            - [Hide](#hide)
-            - [Save State](#save-state)
-            - [Load State](#load-state)
-            - [Color](#color)
-            - [Load OBJ](#load-obj)
-            - [Load OBJ Optimized](#load-obj-optimized)
-            - [Input Texture File](#input-texture-file)
-            - [Load Array from CSV](#load-array-from-csv)
-            - [Settings for Both OBJ Optimized and normal loading](#settings-for-both-obj-optimized-and-normal-loading)
-            - [Settings for OBJ Optimized loading](#settings-for-obj-optimized-loading)
-    - [Tips](#tips)
+  - [Tools](#tools)
+  - [Hide](#hide)
+  - [Save State](#save-state)
+  - [Load State](#load-state)
+  - [Load OBJ](#load-obj)
+  - [Load OBJ Optimized](#load-obj-optimized)
+  - [Input Texture File](#input-texture-file)
+  - [Load Array from CSV](#load-array-from-csv)
+  - [Settings for Both OBJ Optimized and normal loading](#settings-for-both-obj-optimized-and-normal-loading)
+  - [Settings for OBJ Optimized loading](#settings-for-obj-optimized-loading)
+- [Tips](#tips)
 
 
 # Desloader
@@ -36,6 +35,10 @@ For the Most Resent release install the extension from a ZIP file.
 
 - Head on over to [DesLoader releases](https://github.com/Mr-milky-way/Desloader/releases/tag/0.1.0) and get the newest release for your browser **Chrome.zip** for Chrome based browsers and **Firefox.zip** for Firefox.
 - Navigate to `chrome://extensions` for Chrome based browsers and `about:debugging` for Firefox.
+
+#### Other: Using the bookmarklet
+Just copy the bookmarklet.js and add it like any other bookmarklet.
+
 #### Chrome
 - Unzip the downloaded zip file to a folder
 - Enable "Developer mode" (top-right)
