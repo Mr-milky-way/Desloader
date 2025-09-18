@@ -1,4 +1,4 @@
-javascript:(function(){
+javascript: (function () {
     setTimeout(() => {
         const script = document.createElement('script');
         script.src = `https://cdn.jsdelivr.net/gh/Mr-milky-way/Desloader@main/Chrome/injected.js`;
@@ -95,29 +95,47 @@ javascript:(function(){
             <div class="main" id="main_bit">
                 <button class="button1" onclick="hide()">Hide</button>
                 <h3>Tools</h3>
-                <h4>Save State <button class="button1" onclick="downloadState(Calc)">Save State</button></h4>
+                <h4><button class="button1" onclick="downloadState(Calc)">Save State</button></h4>
                 <h4>Load State <input class="file1" type="file" id="loadState" accept=".des" /></h4>
-                <h4>Load OBJ <input class="file1" type="file" id="loadOBJ" accept=".obj" /></h4>
-                <h4>Load OBJ Optimized <input class="file1" type="file" id="loadOBJ_faster" accept=".obj" /></h4>
-                <h4>Input Texture File (Only work on the most recent OBJ with UV map) <input class="file1" type="file" id="upload" accept="image/png, image/jpeg" /></h4>
-                <h4>Load Array from CSV (Use the Array Name input from Placement) <input class="file1" type="file" id="LoadArray" accept=".csv" /></h4>
-                <h4>Settings for Both OBJ Optimized and normal loading. Do all this before uploading file.</h4>
-                <h5>Load OBJ Optimized/Load OBJ with UV map?<input type="checkbox" id="UVmapCheckBox"></h5>
-                <h5>Color <input class="text1" type="text" id="color" placeholder="Color Variable Name"></h5>
-                <h4>Settings for Load OBJ Optimized</h4>
-                <h5>Load OBJ Optimized with over 10,000 Triangles? (Naming of the Face and Vertex Vars will be turned off)<input type="checkbox" id="RemoveTriLimitCheckBox"></h5>
-                <h5>Reflection on the X? <input type="checkbox" id="XCheckBox"></h5>
-                <h5>Reflection on the Y? <input type="checkbox" id="YCheckBox"></h5>
-                <h5>Reflection on the Z? <input type="checkbox" id="ZCheckBox"></h5>
-                <h5>Load OBJ Optimized with array for Placement?<input type="checkbox" id="PosArrayCheckBox"></h5>
-                <h5>Load OBJ Optimized with array for Rotations? (Only works in degrees)<input type="checkbox" id="RotArrayCheckBox"></h5>
-                <h5>Load OBJ Optimized with array for Scale? (Scales all Axises, Only works when the above 2 are checked)<input type="checkbox" id="ScaleArrayCheckBox"></h5>
-                <input class="text1" type="text" id="PosArray" placeholder="Array Name For Placement (3D)">
-                <input class="text1" type="text" id="RotArray" placeholder="Array Name For Rotations (3D)">
-                <input class="text1" type="text" id="ScaleArray" placeholder="Array Name For Scale (1D)">
-                <input class="text1" type="text" id="ArrayCount" placeholder="Array Count">
-                <input class="text1" type="text" id="VertexName" placeholder="Name of Vertex Var">
-                <input class="text1" type="text" id="FaceName" placeholder="Name of Face Var">
+                <div class="3d" id="main_3D">
+                    <h4><button class="button1" onclick="To2d();">Go to 2D</button></h4>
+                    <h4>Load OBJ <input class="file1" type="file" id="loadOBJ" accept=".obj" /></h4>
+                    <h4>Load OBJ Optimized <input class="file1" type="file" id="loadOBJ_faster" accept=".obj" /></h4>
+                    <h4>Input Texture File (Only work on the most recent OBJ with UV map) <input class="file1" type="file" id="upload" accept="image/png, image/jpeg" /></h4>
+                    <h4>Load Array from CSV (Use the Array Name input from Placement) <input class="file1" type="file" id="LoadArray" accept=".csv" /></h4>
+                    <h4>Settings for Both OBJ Optimized and normal loading. Do all this before uploading file.</h4>
+                    <h5>Load OBJ Optimized/Load OBJ with UV map?<input type="checkbox" id="UVmapCheckBox"></h5>
+                    <h5>Color <input class="text1" type="text" id="color" placeholder="Color Variable Name"></h5>
+                    <h4>Settings for Load OBJ Optimized</h4>
+                    <h5>Load OBJ Optimized with over 10,000 Triangles? (Naming of the Face and Vertex Vars will be turned off)<input type="checkbox" id="RemoveTriLimitCheckBox"></h5>
+                    <h5>Reflection on the X? <input type="checkbox" id="XCheckBox"></h5>
+                    <h5>Reflection on the Y? <input type="checkbox" id="YCheckBox"></h5>
+                    <h5>Reflection on the Z? <input type="checkbox" id="ZCheckBox"></h5>
+                    <h5>Load OBJ Optimized with array for Placement?<input type="checkbox" id="PosArrayCheckBox"></h5>
+                    <h5>Load OBJ Optimized with array for Rotations? (Only works in degrees)<input type="checkbox" id="RotArrayCheckBox"></h5>
+                    <h5>Load OBJ Optimized with array for Scale? (Scales all Axises, Only works when the above 2 are checked)<input type="checkbox" id="ScaleArrayCheckBox"></h5>
+                    <input class="text1" type="text" id="PosArray" placeholder="Array Name For Placement (3D)">
+                    <input class="text1" type="text" id="RotArray" placeholder="Array Name For Rotations (3D)">
+                    <input class="text1" type="text" id="ScaleArray" placeholder="Array Name For Scale (1D)">
+                    <input class="text1" type="text" id="ArrayCount" placeholder="Array Count">
+                    <input class="text1" type="text" id="VertexName" placeholder="Name of Vertex Var">
+                    <input class="text1" type="text" id="FaceName" placeholder="Name of Face Var">
+                </div>
+                <div class="2d" id="main_2D">
+                    <h4><button class="button1" onclick="To3d();">Go to 3D</button></h4>
+                    <h4><button class="button1" onclick="AddTicker();">Add starter ticker</button></h4>
+                    <h4><button class="button1" onclick="AddBox();">Add Box</button></h4>
+                    <input class="text1" type="text" id="BoxName" placeholder="BoxName">
+                    <input class="text1" type="text" id="BoxSizeX" placeholder="BoxSizeX">
+                    <input class="text1" type="text" id="BoxSizeY" placeholder="BoxSizeY">
+                    <input class="text1" type="text" id="BoxX" placeholder="BoxX">
+                    <input class="text1" type="text" id="BoxY" placeholder="BoxY">
+                    <input class="text1" type="text" id="BoxColor" placeholder="BoxColor">
+                    <input class="text1" type="text" id="BoxOpacity" placeholder="BoxOpacity">
+                    <h4>Load OBJ into table<input class="file1" type="file" id="loadOBJtale" accept=".obj" /></h4>
+                    <h4>Import DesCode<input class="file1" type="file" id="loadDesCode" accept=".DesCode" /></h4>
+                    <h5>Clear Graph when uploading code? <input type="checkbox" id="CodeClearCheckBox"></h5>
+                </div>
             </div>
             <div class="show" id="show_bit">
                 <button class="button1" onclick="show()">Show</button>

@@ -1,0 +1,17 @@
+var number DeltaTime = 0
+var number Past = 0
+var number Curr = 1
+var number New = 0
+var array testing = [(1,1),(1,2),(Curr,Past)]
+
+function Test() {
+    Curr = Curr+Past;
+    Past = Curr;
+}
+
+
+ticker(0) {
+    Test()
+    New = New + 1;
+    DeltaTime = dt;
+}
