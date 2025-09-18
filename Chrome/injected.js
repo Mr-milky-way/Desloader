@@ -2401,12 +2401,14 @@ function tokentoAST(input) {
         }
     }
     // Dev Stuff
+    /*
     const blob = new Blob([JSON.stringify(AST)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "Testdescode.json";
     a.click();
     URL.revokeObjectURL(a.href);
+    */
     return AST
 }
 
