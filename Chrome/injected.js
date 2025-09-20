@@ -1607,11 +1607,11 @@ function tokenizer(input) {
 
         if (/^\d+$/.test(value)) {
             type = "NUMBER";
-        } else if (["+", "-", "*", "/", "=", "^", "<", ">"].includes(value)) {
+        } else if (["+", "-", "*", "/", "=", "^", "<", ">", ""].includes(value)) {
             type = "OPERATOR";
         } else if (["(", ")", "{", "}", ";", "[", "]", ",", "."].includes(value)) {
             type = "PUNCTUATION";
-        } else if (["if", "var", "function", "else", "ticker", "random", "round"].includes(value)) {
+        } else if (["if", "var", "function", "else", "ticker", "random", "round", "sign", "polygon", "max", "min", "mod", "with", "sin", "cos", "tan", "csc", "sec", "cot", "mean", "meadian", "quartile", "shuffle", "midpoint", "floor", "ceil", "distance", "count", "total", "mad", "stats", "estimate"].includes(value)) {
             type = "KEYWORD";
         } else if (["number", "array", "vector"].includes(value)) {
             type = "VARABLE IDENTIFIER";
@@ -2198,7 +2198,7 @@ function tokentoAST(input) {
                                 if (input[W].value == ";") {
                                     break
                                 } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                                    if (input[W].value.length > 1) {
+                                    if (input[W].value.length > 1 && input[W].value !== "dt") {
                                         identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                     } else {
                                         identifer = input[W].value
@@ -2222,7 +2222,7 @@ function tokentoAST(input) {
                                     break
                                 } else {
                                     if (input[W].value !== ",") {
-                                        if (input[W].value.length > 1) {
+                                        if (input[W].value.length > 1 && input[W].value !== "dt") {
                                             arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                         } else {
                                             arg = input[W].value
@@ -2291,7 +2291,7 @@ function tokentoAST(input) {
                                 if (input[W].value == ";") {
                                     break
                                 } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                                    if (input[W].value.length > 1) {
+                                    if (input[W].value.length > 1 && input[W].value !== "dt") {
                                         identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                     } else {
                                         identifer = input[W].value
@@ -2315,7 +2315,7 @@ function tokentoAST(input) {
                                     break
                                 } else {
                                     if (input[W].value !== ",") {
-                                        if (input[W].value.length > 1) {
+                                        if (input[W].value.length > 1 && input[W].value !== "dt") {
                                             arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                         } else {
                                             arg = input[W].value
@@ -2369,7 +2369,7 @@ function tokentoAST(input) {
                                 if (input[W].value == ";") {
                                     break
                                 } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                                    if (input[W].value.length > 1) {
+                                    if (input[W].value.length > 1 && input[W].value !== "dt") {
                                         identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                     } else {
                                         identifer = input[W].value
@@ -2393,7 +2393,7 @@ function tokentoAST(input) {
                                     break
                                 } else {
                                     if (input[W].value !== ",") {
-                                        if (input[W].value.length > 1) {
+                                        if (input[W].value.length > 1 && input[W].value !== "dt") {
                                             arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                         } else {
                                             arg = input[W].value
