@@ -1598,7 +1598,7 @@ document.getElementById("loadDesCode").addEventListener("change", e => {
 
 function tokenizer(input) {
     const tokens = [];
-    const regex = /\s*([A-Za-z_]\w*|\d+|".*?"|[-+*/=^<>(){},;\[\]])\s*/g;
+    const regex = /\s*([A-Za-z_]\w*|\d+|".*?"|[-+*/=^<>(){},.;\[\]])\s*/g;
     let match;
 
     while ((match = regex.exec(input)) !== null) {
@@ -1609,11 +1609,11 @@ function tokenizer(input) {
             type = "NUMBER";
         } else if (["+", "-", "*", "/", "=", "^", "<", ">"].includes(value)) {
             type = "OPERATOR";
-        } else if (["(", ")", "{", "}", ";", "[", "]", ","].includes(value)) {
+        } else if (["(", ")", "{", "}", ";", "[", "]", ",", "."].includes(value)) {
             type = "PUNCTUATION";
-        } else if (["if", "var", "function", "else", "ticker"].includes(value)) {
+        } else if (["if", "var", "function", "else", "ticker", "random", "round"].includes(value)) {
             type = "KEYWORD";
-        } else if (["number", "array"].includes(value)) {
+        } else if (["number", "array", "vector"].includes(value)) {
             type = "VARABLE IDENTIFIER";
         } else {
             type = "IDENTIFIER";
@@ -1674,6 +1674,30 @@ function tokentoAST(input) {
                 };
                 AST.push(data)
             }
+            if (input[i + 1].value == "vector") {
+                values = []
+                for (e = i + 5; e < input.length; e++) {
+                    if (input[e].value == ")") {
+                        break
+                    } else if (input[e].type == "IDENTIFIER" && input[e].value.length > 1) {
+                        values.push(input[e].value.slice(0, 1) + "_{" + input[e].value.slice(1) + "}")
+                    } else {
+                        values.push(input[e].value)
+                    }
+                }
+                if (input[i+2].value.length > 1) {
+                    identifer = input[i+2].value.slice(0, 1) + "_{" + input[i+2].value.slice(1) + "}"
+                } else {
+                    identifer = input[i+2].value
+                }
+                data = {
+                    type: "VariableDeclarator",
+                    varabletype: "VECTOR",
+                    identifer: identifer,
+                    value: values
+                };
+                AST.push(data)
+            }
         }
         if (input[i].type == "KEYWORD" && input[i].value == "function") {
             args = []
@@ -1721,7 +1745,7 @@ function tokentoAST(input) {
                         if (input[W].value == ";") {
                             e = W
                             break
-                        } else if (input[W].type == "IDENTIFIER") {
+                        } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
                             if (input[W].value.length > 1) {
                                 identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                             } else {
@@ -1741,7 +1765,7 @@ function tokentoAST(input) {
                         identifer = input[e].value
                     }
                     args = []
-                    for (W = i + 3; W < input.length; W++) {
+                    for (W = e+2; W < input.length; W++) {
                         if (input[W].value == ")") {
                             break
                         } else if (input[W].value == "(") {
@@ -1811,7 +1835,7 @@ function tokentoAST(input) {
                             for (W = E + 2; W < input.length; W++) {
                                 if (input[W].value == ";") {
                                     break
-                                } else if (input[W].type == "IDENTIFIER") {
+                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
                                     if (input[W].value.length > 1) {
                                         identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                     } else {
@@ -1831,7 +1855,7 @@ function tokentoAST(input) {
                                 identifer = input[E].value
                             }
                             args = []
-                            for (W = i + 4; W < input.length; W++) {
+                            for (W = E + 2; W < input.length; W++) {
                                 if (input[W].value == ")") {
                                     break
                                 } else {
@@ -1904,7 +1928,7 @@ function tokentoAST(input) {
                             for (W = E + 2; W < input.length; W++) {
                                 if (input[W].value == ";") {
                                     break
-                                } else if (input[W].type == "IDENTIFIER") {
+                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
                                     if (input[W].value.length > 1) {
                                         identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                     } else {
@@ -1982,7 +2006,7 @@ function tokentoAST(input) {
                             for (W = A + 2; W < input.length; W++) {
                                 if (input[W].value == ";") {
                                     break
-                                } else if (input[W].type == "IDENTIFIER") {
+                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
                                     if (input[W].value.length > 1) {
                                         identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                     } else {
@@ -2083,7 +2107,7 @@ function tokentoAST(input) {
                         if (input[W].value == ";") {
                             e = W
                             break
-                        } else if (input[W].type == "IDENTIFIER") {
+                        } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
                             if (input[W].value.length > 1 && input[W].value !== "dt") {
                                 identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                             } else {
@@ -2173,7 +2197,7 @@ function tokentoAST(input) {
                             for (W = E + 2; W < input.length; W++) {
                                 if (input[W].value == ";") {
                                     break
-                                } else if (input[W].type == "IDENTIFIER") {
+                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
                                     if (input[W].value.length > 1) {
                                         identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                     } else {
@@ -2266,7 +2290,7 @@ function tokentoAST(input) {
                             for (W = E + 2; W < input.length; W++) {
                                 if (input[W].value == ";") {
                                     break
-                                } else if (input[W].type == "IDENTIFIER") {
+                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
                                     if (input[W].value.length > 1) {
                                         identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                     } else {
@@ -2344,7 +2368,7 @@ function tokentoAST(input) {
                             for (W = A + 2; W < input.length; W++) {
                                 if (input[W].value == ";") {
                                     break
-                                } else if (input[W].type == "IDENTIFIER") {
+                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
                                     if (input[W].value.length > 1) {
                                         identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                     } else {
@@ -2426,6 +2450,13 @@ function ASTToDesmos(AST, calcstate) {
                 type: "expression",
                 id: 1,
                 latex: AST[i].identifer + "=[" + AST[i].value.join("") + "]"
+            });
+        }
+        if (AST[i].type == "VariableDeclarator" && AST[i].varabletype == "VECTOR") {
+            calcstate.expressions.list.push({
+                type: "expression",
+                id: 1,
+                latex: AST[i].identifer + "=(" + AST[i].value.join("") + ")"
             });
         }
         if (AST[i].type == "FunctionDeclaration") {
