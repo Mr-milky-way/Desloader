@@ -2133,7 +2133,7 @@ function tokentoAST(input) {
                         } else if (input[W].value == "(") {
                         } else {
                             if (input[W].value !== ",") {
-                                if (input[W].value.length > 1) {
+                                if (input[W].value.length > 1 && input[W].value !== "dt") {
                                     arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
                                 } else {
                                     arg = input[W].value
