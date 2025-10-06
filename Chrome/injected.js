@@ -1628,6 +1628,7 @@ function tokenizer(input) {
 function tokentoAST(input) {
     const AST = []
     for (let i = 0; i < input.length; i++) {
+        // Varable stuff
         if (input[i].type == "KEYWORD" && input[i].value == "var") {
             if (input[i + 1].value == "number") {
                 if (input[i + 2].value.length > 1) {
@@ -1661,10 +1662,10 @@ function tokentoAST(input) {
                         values.push(input[e].value)
                     }
                 }
-                if (input[i+2].value.length > 1) {
-                    identifer = input[i+2].value.slice(0, 1) + "_{" + input[i+2].value.slice(1) + "}"
+                if (input[i + 2].value.length > 1) {
+                    identifer = input[i + 2].value.slice(0, 1) + "_{" + input[i + 2].value.slice(1) + "}"
                 } else {
-                    identifer = input[i+2].value
+                    identifer = input[i + 2].value
                 }
                 data = {
                     type: "VariableDeclarator",
@@ -1685,10 +1686,10 @@ function tokentoAST(input) {
                         values.push(input[e].value)
                     }
                 }
-                if (input[i+2].value.length > 1) {
-                    identifer = input[i+2].value.slice(0, 1) + "_{" + input[i+2].value.slice(1) + "}"
+                if (input[i + 2].value.length > 1) {
+                    identifer = input[i + 2].value.slice(0, 1) + "_{" + input[i + 2].value.slice(1) + "}"
                 } else {
-                    identifer = input[i+2].value
+                    identifer = input[i + 2].value
                 }
                 data = {
                     type: "VariableDeclarator",
@@ -1699,6 +1700,7 @@ function tokentoAST(input) {
                 AST.push(data)
             }
         }
+        // Function stuff
         if (input[i].type == "KEYWORD" && input[i].value == "function") {
             args = []
             data = {
@@ -1727,336 +1729,16 @@ function tokentoAST(input) {
                 if (input[e].value == "}") {
                     break
                 } else if (input[e].type == "IDENTIFIER" && input[e + 1].value == "=") {
-                    if (input[e].value.length > 1) {
-                        identifer = input[e].value.slice(0, 1) + "_{" + input[e].value.slice(1) + "}"
-                    } else {
-                        identifer = input[e].value
-                    }
-                    dat = {
-                        type: "ExpressionStatement",
-                        Expression: {
-                            type: "AssignmentExpression",
-                            identifier: identifer,
-                            body: []
-                        }
-                    }
-                    Expression = []
-                    for (W = e + 2; W < input.length; W++) {
-                        if (input[W].value == ";") {
-                            e = W
-                            break
-                        } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                            if (input[W].value.length > 1) {
-                                identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                            } else {
-                                identifer = input[W].value
-                            }
-                            Expression.push(identifer)
-                        } else {
-                            Expression.push(input[W].value)
-                        }
-                    }
-                    dat.Expression.body.push(Expression)
-                    data.body.push(dat)
+                    AssignmentExpression(data, e)
                 } else if (input[e].type == "IDENTIFIER" && input[e + 1].value == "(") {
-                    if (input[e].value.length > 1) {
-                        identifer = input[e].value.slice(0, 1) + "_{" + input[e].value.slice(1) + "}"
-                    } else {
-                        identifer = input[e].value
-                    }
-                    args = []
-                    for (W = e+2; W < input.length; W++) {
-                        if (input[W].value == ")") {
-                            break
-                        } else if (input[W].value == "(") {
-                        } else {
-                            if (input[W].value !== ",") {
-                                if (input[W].value.length > 1) {
-                                    arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                } else {
-                                    arg = input[W].value
-                                }
-                                args.push(arg)
-                            }
-                        }
-                    }
-                    dat = {
-                        type: "ExpressionStatement",
-                        Expression: {
-                            type: "CallExpression",
-                            identifier: identifer,
-                            args: args
-                        }
-                    }
-                    data.body.push(dat)
+                    CallExpression(data, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "if") {
-                    args = []
-                    for (W = e + 2; W < input.length; W++) {
-                        if (input[W].value == ")") {
-                            i = W
-                            break
-                        } else {
-                            if (input[W].value !== ",") {
-                                if (input[W].value.length > 1 && input[W].type !== "NUMBER") {
-                                    arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                } else {
-                                    arg = input[W].value
-                                }
-                                args.push(arg)
-                            }
-                        }
-                    }
-                    dato = {
-                        type: "IfStatement",
-                        Expression: {
-                            type: "IfStatement",
-                            test: args,
-                            body: []
-                        }
-                    }
-                    for (E = i; E < input.length; E++) {
-                        if (input[E].value == "}") {
-                            break
-                        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "=") {
-                            if (input[E].value.length > 1) {
-                                identifer = input[E].value.slice(0, 1) + "_{" + input[E].value.slice(1) + "}"
-                            } else {
-                                identifer = input[E].value
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "AssignmentExpression",
-                                    identifier: identifer,
-                                    body: []
-                                }
-                            }
-                            Expression = []
-                            for (W = E + 2; W < input.length; W++) {
-                                if (input[W].value == ";") {
-                                    break
-                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                                    if (input[W].value.length > 1) {
-                                        identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                    } else {
-                                        identifer = input[W].value
-                                    }
-                                    Expression.push(identifer)
-                                } else {
-                                    Expression.push(input[W].value)
-                                }
-                            }
-                            dat.Expression.body.push(Expression)
-                            dato.Expression.body.push(dat)
-                        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "(") {
-                            if (input[E].value.length > 1) {
-                                identifer = input[E].value.slice(0, 1) + "_{" + input[E].value.slice(1) + "}"
-                            } else {
-                                identifer = input[E].value
-                            }
-                            args = []
-                            for (W = E + 2; W < input.length; W++) {
-                                if (input[W].value == ")") {
-                                    break
-                                } else {
-                                    if (input[W].value !== ",") {
-                                        if (input[W].value.length > 1) {
-                                            arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                        } else {
-                                            arg = input[W].value
-                                        }
-                                        args.push(arg)
-                                    }
-                                }
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "CallExpression",
-                                    identifier: identifer,
-                                    args: args
-                                }
-                            }
-                            dato.Expression.body.push(dat)
-                        }
-                    }
-                    data.body.push(dato)
-                    e = E
+                    e = IfStatement(data, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "else" && input[e + 1].value == "if") {
-                    args = []
-                    for (W = e + 3; W < input.length; W++) {
-                        if (input[W].value == ")") {
-                            i = W
-                            break
-                        } else {
-                            if (input[W].value !== ",") {
-                                if (input[W].value.length > 1 && input[W].type !== "NUMBER") {
-                                    arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                } else {
-                                    arg = input[W].value
-                                }
-                                args.push(arg)
-                            }
-                        }
-                    }
-                    dato = {
-                        type: "ElseIfStatement",
-                        Expression: {
-                            type: "IfStatement",
-                            test: args,
-                            body: []
-                        }
-                    }
-                    for (E = i; E < input.length; E++) {
-                        if (input[E].value == "}") {
-                            break
-                        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "=") {
-                            if (input[E].value.length > 1) {
-                                identifer = input[E].value.slice(0, 1) + "_{" + input[E].value.slice(1) + "}"
-                            } else {
-                                identifer = input[E].value
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "AssignmentExpression",
-                                    identifier: identifer,
-                                    body: []
-                                }
-                            }
-                            Expression = []
-                            for (W = E + 2; W < input.length; W++) {
-                                if (input[W].value == ";") {
-                                    break
-                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                                    if (input[W].value.length > 1) {
-                                        identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                    } else {
-                                        identifer = input[W].value
-                                    }
-                                    Expression.push(identifer)
-                                } else {
-                                    Expression.push(input[W].value)
-                                }
-                            }
-                            dat.Expression.body.push(Expression)
-                            dato.Expression.body.push(dat)
-                        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "(") {
-                            if (input[E].value.length > 1) {
-                                identifer = input[E].value.slice(0, 1) + "_{" + input[E].value.slice(1) + "}"
-                            } else {
-                                identifer = input[E].value
-                            }
-                            args = []
-                            for (W = i + 4; W < input.length; W++) {
-                                if (input[W].value == ")") {
-                                    break
-                                } else {
-                                    if (input[W].value !== ",") {
-                                        if (input[W].value.length > 1) {
-                                            arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                        } else {
-                                            arg = input[W].value
-                                        }
-                                        args.push(arg)
-                                    }
-                                }
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "CallExpression",
-                                    identifier: identifer,
-                                    args: args
-                                }
-                            }
-                            dato.Expression.body.push(dat)
-                        }
-                    }
-                    data.body.push(dato)
-                    e = E
+                    e = ElseIfStatement(data, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "else" && input[e + 1].value !== "if") {
-                    args = []
-                    dato = {
-                        type: "ElseStatement",
-                        Expression: {
-                            type: "IfStatement",
-                            test: args,
-                            body: []
-                        }
-                    }
-                    for (A = e; A < input.length; A++) {
-                        if (input[A].value == "}") {
-                            break
-                        } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "=") {
-                            if (input[A].value.length > 1) {
-                                identifer = input[A].value.slice(0, 1) + "_{" + input[A].value.slice(1) + "}"
-                            } else {
-                                identifer = input[A].value
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "AssignmentExpression",
-                                    identifier: identifer,
-                                    body: []
-                                }
-                            }
-                            Expression = []
-                            for (W = A + 2; W < input.length; W++) {
-                                if (input[W].value == ";") {
-                                    break
-                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                                    if (input[W].value.length > 1) {
-                                        identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                    } else {
-                                        identifer = input[W].value
-                                    }
-                                    Expression.push(identifer)
-                                } else {
-                                    Expression.push(input[W].value)
-                                }
-                            }
-                            dat.Expression.body.push(Expression)
-                            dato.Expression.body.push(dat)
-                        } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "(") {
-                            if (input[A].value.length > 1) {
-                                identifer = input[A].value.slice(0, 1) + "_{" + input[A].value.slice(1) + "}"
-                            } else {
-                                identifer = input[A].value
-                            }
-                            args = []
-                            for (W = i + 4; W < input.length; W++) {
-                                if (input[W].value == ")") {
-                                    break
-                                } else {
-                                    if (input[W].value !== ",") {
-                                        if (input[W].value.length > 1) {
-                                            arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                        } else {
-                                            arg = input[W].value
-                                        }
-                                        args.push(arg)
-                                    }
-                                }
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "CallExpression",
-                                    identifier: identifer,
-                                    args: args
-                                }
-                            }
-                            dato.Expression.body.push(dat)
-                        }
-                    }
-                    data.body.push(dato)
-                    e = A
-                    i = A
-                    console.log(A)
-                    console.log(input[A].value)
-                    console.log(input[A + 1].value)
+                    e = ElseStatement(data, e)
+                    i = e
                 }
             }
             AST.push(data)
@@ -2089,351 +1771,218 @@ function tokentoAST(input) {
                 if (input[e].value == "}") {
                     break
                 } else if (input[e].type == "IDENTIFIER" && input[e + 1].value == "=") {
-                    if (input[e].value.length > 1) {
-                        identifer = input[e].value.slice(0, 1) + "_{" + input[e].value.slice(1) + "}"
-                    } else {
-                        identifer = input[e].value
-                    }
-                    dat = {
-                        type: "ExpressionStatement",
-                        Expression: {
-                            type: "AssignmentExpression",
-                            identifier: identifer,
-                            body: []
-                        }
-                    }
-                    Expression = []
-                    for (W = e + 2; W < input.length; W++) {
-                        if (input[W].value == ";") {
-                            e = W
-                            break
-                        } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                            if (input[W].value.length > 1 && input[W].value !== "dt") {
-                                identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                            } else {
-                                identifer = input[W].value
-                            }
-                            Expression.push(identifer)
-                        } else {
-                            Expression.push(input[W].value)
-                        }
-                    }
-                    dat.Expression.body.push(Expression)
-                    data.body.push(dat)
+                    AssignmentExpression(data, e)
                 } else if (input[e].type == "IDENTIFIER" && input[e + 1].value == "(") {
-                    if (input[e].value.length > 1) {
-                        identifer = input[e].value.slice(0, 1) + "_{" + input[e].value.slice(1) + "}"
-                    } else {
-                        identifer = input[e].value
-                    }
-                    args = []
-                    for (W = i + 3; W < input.length; W++) {
-                        if (input[W].value == ")") {
-                            break
-                        } else if (input[W].value == "(") {
-                        } else {
-                            if (input[W].value !== ",") {
-                                if (input[W].value.length > 1 && input[W].value !== "dt") {
-                                    arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                } else {
-                                    arg = input[W].value
-                                }
-                                args.push(arg)
-                            }
-                        }
-                    }
-                    dat = {
-                        type: "ExpressionStatement",
-                        Expression: {
-                            type: "CallExpression",
-                            identifier: identifer,
-                            args: args
-                        }
-                    }
-                    data.body.push(dat)
+                    CallExpression(data, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "if") {
-                    args = []
-                    for (W = e + 2; W < input.length; W++) {
-                        if (input[W].value == ")") {
-                            i = W
-                            break
-                        } else {
-                            if (input[W].value !== ",") {
-                                if (input[W].value.length > 1 && input[W].type !== "NUMBER") {
-                                    arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                } else {
-                                    arg = input[W].value
-                                }
-                                args.push(arg)
-                            }
-                        }
-                    }
-                    dato = {
-                        type: "IfStatement",
-                        Expression: {
-                            type: "IfStatement",
-                            test: args,
-                            body: []
-                        }
-                    }
-                    for (E = i; E < input.length; E++) {
-                        if (input[E].value == "}") {
-                            break
-                        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "=") {
-                            if (input[E].value.length > 1) {
-                                identifer = input[E].value.slice(0, 1) + "_{" + input[E].value.slice(1) + "}"
-                            } else {
-                                identifer = input[E].value
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "AssignmentExpression",
-                                    identifier: identifer,
-                                    body: []
-                                }
-                            }
-                            Expression = []
-                            for (W = E + 2; W < input.length; W++) {
-                                if (input[W].value == ";") {
-                                    break
-                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                                    if (input[W].value.length > 1 && input[W].value !== "dt") {
-                                        identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                    } else {
-                                        identifer = input[W].value
-                                    }
-                                    Expression.push(identifer)
-                                } else {
-                                    Expression.push(input[W].value)
-                                }
-                            }
-                            dat.Expression.body.push(Expression)
-                            dato.Expression.body.push(dat)
-                        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "(") {
-                            if (input[E].value.length > 1) {
-                                identifer = input[E].value.slice(0, 1) + "_{" + input[E].value.slice(1) + "}"
-                            } else {
-                                identifer = input[E].value
-                            }
-                            args = []
-                            for (W = i + 4; W < input.length; W++) {
-                                if (input[W].value == ")") {
-                                    break
-                                } else {
-                                    if (input[W].value !== ",") {
-                                        if (input[W].value.length > 1 && input[W].value !== "dt") {
-                                            arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                        } else {
-                                            arg = input[W].value
-                                        }
-                                        args.push(arg)
-                                    }
-                                }
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "CallExpression",
-                                    identifier: identifer,
-                                    args: args
-                                }
-                            }
-                            dato.Expression.body.push(dat)
-                        }
-                    }
-                    data.body.push(dato)
-                    e = E
+                    e = IfStatement(data, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "else" && input[e + 1].value == "if") {
-                    args = []
-                    for (W = e + 3; W < input.length; W++) {
-                        if (input[W].value == ")") {
-                            i = W
-                            break
-                        } else {
-                            if (input[W].value !== ",") {
-                                if (input[W].value.length > 1 && input[W].type !== "NUMBER") {
-                                    arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                } else {
-                                    arg = input[W].value
-                                }
-                                args.push(arg)
-                            }
-                        }
-                    }
-                    dato = {
-                        type: "ElseIfStatement",
-                        Expression: {
-                            type: "IfStatement",
-                            test: args,
-                            body: []
-                        }
-                    }
-                    for (E = i; E < input.length; E++) {
-                        if (input[E].value == "}") {
-                            break
-                        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "=") {
-                            if (input[E].value.length > 1) {
-                                identifer = input[E].value.slice(0, 1) + "_{" + input[E].value.slice(1) + "}"
-                            } else {
-                                identifer = input[E].value
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "AssignmentExpression",
-                                    identifier: identifer,
-                                    body: []
-                                }
-                            }
-                            Expression = []
-                            for (W = E + 2; W < input.length; W++) {
-                                if (input[W].value == ";") {
-                                    break
-                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                                    if (input[W].value.length > 1 && input[W].value !== "dt") {
-                                        identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                    } else {
-                                        identifer = input[W].value
-                                    }
-                                    Expression.push(identifer)
-                                } else {
-                                    Expression.push(input[W].value)
-                                }
-                            }
-                            dat.Expression.body.push(Expression)
-                            dato.Expression.body.push(dat)
-                        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "(") {
-                            if (input[E].value.length > 1) {
-                                identifer = input[E].value.slice(0, 1) + "_{" + input[E].value.slice(1) + "}"
-                            } else {
-                                identifer = input[E].value
-                            }
-                            args = []
-                            for (W = i + 4; W < input.length; W++) {
-                                if (input[W].value == ")") {
-                                    break
-                                } else {
-                                    if (input[W].value !== ",") {
-                                        if (input[W].value.length > 1 && input[W].value !== "dt") {
-                                            arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                        } else {
-                                            arg = input[W].value
-                                        }
-                                        args.push(arg)
-                                    }
-                                }
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "CallExpression",
-                                    identifier: identifer,
-                                    args: args
-                                }
-                            }
-                            dato.Expression.body.push(dat)
-                        }
-                    }
-                    data.body.push(dato)
-                    e = E
+                    e = ElseIfStatement(data, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "else" && input[e + 1].value !== "if") {
-                    args = []
-                    dato = {
-                        type: "ElseStatement",
-                        Expression: {
-                            type: "IfStatement",
-                            test: args,
-                            body: []
-                        }
-                    }
-                    for (A = e; A < input.length; A++) {
-                        if (input[A].value == "}") {
-                            break
-                        } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "=") {
-                            if (input[A].value.length > 1) {
-                                identifer = input[A].value.slice(0, 1) + "_{" + input[A].value.slice(1) + "}"
-                            } else {
-                                identifer = input[A].value
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "AssignmentExpression",
-                                    identifier: identifer,
-                                    body: []
-                                }
-                            }
-                            Expression = []
-                            for (W = A + 2; W < input.length; W++) {
-                                if (input[W].value == ";") {
-                                    break
-                                } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
-                                    if (input[W].value.length > 1 && input[W].value !== "dt") {
-                                        identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                    } else {
-                                        identifer = input[W].value
-                                    }
-                                    Expression.push(identifer)
-                                } else {
-                                    Expression.push(input[W].value)
-                                }
-                            }
-                            dat.Expression.body.push(Expression)
-                            dato.Expression.body.push(dat)
-                        } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "(") {
-                            if (input[A].value.length > 1) {
-                                identifer = input[A].value.slice(0, 1) + "_{" + input[A].value.slice(1) + "}"
-                            } else {
-                                identifer = input[A].value
-                            }
-                            args = []
-                            for (W = i + 4; W < input.length; W++) {
-                                if (input[W].value == ")") {
-                                    break
-                                } else {
-                                    if (input[W].value !== ",") {
-                                        if (input[W].value.length > 1 && input[W].value !== "dt") {
-                                            arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
-                                        } else {
-                                            arg = input[W].value
-                                        }
-                                        args.push(arg)
-                                    }
-                                }
-                            }
-                            dat = {
-                                type: "ExpressionStatement",
-                                Expression: {
-                                    type: "CallExpression",
-                                    identifier: identifer,
-                                    args: args
-                                }
-                            }
-                            dato.Expression.body.push(dat)
-                        }
-                    }
-                    data.body.push(dato)
-                    e = A
-                    i = A
-                    console.log(A)
-                    console.log(input[A].value)
-                    console.log(input[A + 1].value)
+                    e = ElseStatement(data, e)
+                    i = e
                 }
             }
             AST.push(data)
         }
     }
     // Dev Stuff
-    /*
+
     const blob = new Blob([JSON.stringify(AST)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "Testdescode.json";
     a.click();
     URL.revokeObjectURL(a.href);
-    */
+
     return AST
+}
+
+function AssignmentExpression(FuncJson, number) {
+    if (input[number].value.length > 1) {
+        identifer = input[number].value.slice(0, 1) + "_{" + input[number].value.slice(1) + "}"
+    } else {
+        identifer = input[number].value
+    }
+    dat = {
+        type: "ExpressionStatement",
+        Expression: {
+            type: "AssignmentExpression",
+            identifier: identifer,
+            body: []
+        }
+    }
+    Expression = []
+    for (W = number + 2; W < input.length; W++) {
+        if (input[W].value == ";") {
+            number = W
+            break
+        } else if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
+            if (input[W].value.length > 1) {
+                identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
+            } else {
+                identifer = input[W].value
+            }
+            Expression.push(identifer)
+        } else {
+            Expression.push(input[W].value)
+        }
+    }
+    dat.Expression.body.push(Expression)
+    FuncJson.body.push(dat)
+}
+
+function CallExpression(FuncJson, number) {
+    if (input[number].value.length > 1) {
+        identifer = input[number].value.slice(0, 1) + "_{" + input[number].value.slice(1) + "}"
+    } else {
+        identifer = input[number].value
+    }
+    args = []
+    for (W = number + 2; W < input.length; W++) {
+        if (input[W].value == ")") {
+            break
+        } else if (input[W].value == "(") {
+        } else {
+            if (input[W].value !== ",") {
+                if (input[W].value.length > 1) {
+                    arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
+                } else {
+                    arg = input[W].value
+                }
+                args.push(arg)
+            }
+        }
+    }
+    dat = {
+        type: "ExpressionStatement",
+        Expression: {
+            type: "CallExpression",
+            identifier: identifer,
+            args: args
+        }
+    }
+    FuncJson.body.push(dat)
+}
+
+function IfStatement(FuncJson, number) {
+    args = []
+    for (W = number + 2; W < input.length; W++) {
+        if (input[W].value == ")") {
+            i = W
+            break
+        } else {
+            if (input[W].value !== ",") {
+                if (input[W].value.length > 1 && input[W].type !== "NUMBER") {
+                    arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
+                } else {
+                    arg = input[W].value
+                }
+                args.push(arg)
+            }
+        }
+    }
+    dato = {
+        type: "IfStatement",
+        Expression: {
+            type: "IfStatement",
+            test: args,
+            body: []
+        }
+    }
+    for (E = i; E < input.length; E++) {
+        if (input[E].value == "}") {
+            break
+        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "=") {
+            AssignmentExpression(dato, E)
+        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "(") {
+            CallExpression(dato, E)
+        } else if (input[E].type == "KEYWORD" && input[E].value == "if") {
+            e = IfStatement(dato, E)
+        } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value == "if") {
+            e = ElseIfStatement(dato, E)
+        } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value !== "if") {
+            e = ElseStatement(dato, E)
+            i = e
+        }
+    }
+    FuncJson.body.push(dato)
+    return E
+}
+
+function ElseIfStatement(FuncJson, number) {
+    args = []
+    for (W = number + 3; W < input.length; W++) {
+        if (input[W].value == ")") {
+            i = W
+            break
+        } else {
+            if (input[W].value !== ",") {
+                if (input[W].value.length > 1 && input[W].type !== "NUMBER") {
+                    arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
+                } else {
+                    arg = input[W].value
+                }
+                args.push(arg)
+            }
+        }
+    }
+    dato = {
+        type: "ElseIfStatement",
+        Expression: {
+            type: "IfStatement",
+            test: args,
+            body: []
+        }
+    }
+    for (E = i; E < input.length; E++) {
+        if (input[E].value == "}") {
+            break
+        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "=") {
+            AssignmentExpression(dato, E)
+        } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "(") {
+            CallExpression(dato, E)
+        } else if (input[E].type == "KEYWORD" && input[E].value == "if") {
+            e = IfStatement(dato, E)
+        } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value == "if") {
+            e = ElseIfStatement(dato, E)
+        } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value !== "if") {
+            e = ElseStatement(dato, E)
+            i = e
+        }
+    }
+    FuncJson.body.push(dato)
+    return E
+}
+
+function ElseStatement(FuncJson, number) {
+    args = []
+    dato = {
+        type: "ElseStatement",
+        Expression: {
+            type: "IfStatement",
+            test: args,
+            body: []
+        }
+    }
+    for (A = number; A < input.length; A++) {
+        if (input[A].value == "}") {
+            break
+        } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "=") {
+            AssignmentExpression(dato, E)
+        } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "(") {
+            CallExpression(dato, E)
+        } else if (input[E].type == "KEYWORD" && input[E].value == "if") {
+            e = IfStatement(dato, E)
+        } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value == "if") {
+            e = ElseIfStatement(dato, E)
+        } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value !== "if") {
+            e = ElseStatement(dato, E)
+            i = e
+        }
+    }
+    FuncJson.body.push(dato)
+    return A
 }
 
 function ASTToDesmos(AST, calcstate) {
@@ -2468,106 +2017,19 @@ function ASTToDesmos(AST, calcstate) {
             body = ""
             for (let e = 0; e < AST[i].body.length; e++) {
                 if (AST[i].body[e].Expression.type == "AssignmentExpression") {
-                    if (e == 0) {
-                        body = AST[i].body[e].Expression.identifier + "\\to "
-                    } else {
-                        body += "," + AST[i].body[e].Expression.identifier + "\\to "
-                    }
-                    for (let W = 0; W < AST[i].body[e].Expression.body[0].length; W++) {
-                        body += AST[i].body[e].Expression.body[0][W]
-                    }
+                    body += AssignmentExpressionASTToDes(AST[i].body[e].Expression.identifier, AST[i].body[e].Expression.body[0].length, AST[i].body[e].Expression.body, e)
                 }
                 if (AST[i].body[e].Expression.type == "CallExpression") {
-                    if (e == 0) {
-                        body = AST[i].body[e].Expression.identifier + "(" + AST[i].body[e].Expression.args + ")"
-                    } else {
-                        body += "," + AST[i].body[e].Expression.identifier + "(" + AST[i].body[e].Expression.args + ")"
-                    }
+                    body += CallExpressionASTToDes(AST[i].body[e].Expression.identifier, AST[i].body[e].Expression.args, e)
                 }
                 if (AST[i].body[e].Expression.type == "IfStatement" && AST[i].body[e].type == "IfStatement") {
-                    args = ""
-                    for (let E = 0; E < AST[i].body[e].Expression.body.length; E++) {
-                        if (AST[i].body[e].Expression.body[E].Expression.type == "AssignmentExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            }
-                            for (let W = 0; W < AST[i].body[e].Expression.body[E].Expression.body[0].length; W++) {
-                                args += AST[i].body[e].Expression.body[E].Expression.body[0][W]
-                            }
-                        }
-                        if (AST[i].body[e].Expression.type == "CallExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            }
-                        }
-                    }
-                    if (e == 0 && AST[i].body[e + 1].type !== "ElseIfStatement" && AST[i].body[e + 1].type !== "ElseStatement") {
-                        body = "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-                    } else if (AST[i].body[e + 1].type !== "ElseIfStatement" && AST[i].body[e + 1].type !== "ElseStatement") {
-                        body += "," + "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-                    } else if (e == 0) {
-                        body = "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")"
-                    } else {
-                        body += "," + "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")"
-                    }
+                    body += IfStatementASTtoDes(AST[i].body[e].Expression.body, AST[i].body, e)
                 }
                 if (AST[i].body[e].Expression.type == "IfStatement" && AST[i].body[e].type == "ElseIfStatement") {
-                    args = ""
-                    for (let E = 0; E < AST[i].body[e].Expression.body.length; E++) {
-                        if (AST[i].body[e].Expression.body[E].Expression.type == "AssignmentExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            }
-                            for (let W = 0; W < AST[i].body[e].Expression.body[E].Expression.body[0].length; W++) {
-                                args += AST[i].body[e].Expression.body[E].Expression.body[0][W]
-                            }
-                        }
-                        if (AST[i].body[e].Expression.type == "CallExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            }
-                        }
-                    }
-                    if (AST[i].body.length > e + 1) {
-                        if (AST[i].body[e + 1].type !== "ElseIfStatement" && AST[i].body[e + 1].type !== "ElseStatement") {
-                            body += "," + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-                        } else {
-                            body += "," + AST[i].body[e].Expression.test.join("") + ":(" + args + ")"
-                        }
-                    } else {
-                        body += "," + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-                    }
+                    body += ElseIfStatementASTToDes(AST[i].body[e].Expression.body, AST[i].body, e)
                 }
                 if (AST[i].body[e].Expression.type == "IfStatement" && AST[i].body[e].type == "ElseStatement") {
-                    args = ""
-                    for (let E = 0; E < AST[i].body[e].Expression.body.length; E++) {
-                        if (AST[i].body[e].Expression.body[E].Expression.type == "AssignmentExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            }
-                            for (let W = 0; W < AST[i].body[e].Expression.body[E].Expression.body[0].length; W++) {
-                                args += AST[i].body[e].Expression.body[E].Expression.body[0][W]
-                            }
-                        }
-                        if (AST[i].body[e].Expression.type == "CallExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            }
-                        }
-                    }
-                    body += "," + args + "\\right\\}"
+                    body += ElseStatementASTToDes(AST[i].body[e].Expression.body,AST[i].body[e].Expression)
                 }
             }
             calcstate.expressions.list.push({
@@ -2693,6 +2155,91 @@ function ASTToDesmos(AST, calcstate) {
     }
 }
 
+
+
+function CallExpressionASTToDes(identifier, args, e) {
+    body = ""
+    if (e == 0) {
+        body = identifier + "(" + args + ")"
+    } else {
+        body += "," + identifier + "(" + args + ")"
+    }
+    return body
+}
+
+function AssignmentExpressionASTToDes(identifier, length, ExpressionBody, e) {
+    body = ""
+    if (e == 0) {
+        body = identifier + "\\to "
+    } else {
+        body += "," + identifier + "\\to "
+    }
+    for (let W = 0; W < length; W++) {
+        body += ExpressionBody[0][W]
+    }
+    return body
+}
+
+function IfStatementASTtoDes(ExpressionBody, ASTBody, e) {
+    args = ""
+    for (let E = 0; E < ExpressionBody.length; E++) {
+        if (ExpressionBody[E].Expression.type == "AssignmentExpression") {
+            args += AssignmentExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.body[0].length, ExpressionBody[E].Expression.body, E)
+        }
+        if (ASTBody[e].Expression.type == "CallExpression") {
+            args += CallExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.args, E)
+        }
+    }
+    body = ""
+    if (e == 0 && ASTBody[e + 1].type !== "ElseIfStatement" && ASTBody[e + 1].type !== "ElseStatement") {
+        body = "\\left\\{" + ASTBody[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
+    } else if (ASTBody[e + 1].type !== "ElseIfStatement" && ASTBody[e + 1].type !== "ElseStatement") {
+        body += "," + "\\left\\{" + ASTBody[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
+    } else if (e == 0) {
+        body = "\\left\\{" + ASTBody[e].Expression.test.join("") + ":(" + args + ")"
+    } else {
+        body += "," + "\\left\\{" + ASTBody[e].Expression.test.join("") + ":(" + args + ")"
+    }
+    return body
+}
+
+function ElseIfStatementASTToDes(ExpressionBody, ASTBody, e) {
+    args = ""
+    for (let E = 0; E < ExpressionBody.length; E++) {
+        if (ExpressionBody[E].Expression.type == "AssignmentExpression") {
+            args += AssignmentExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.body[0].length, ExpressionBody[E].Expression.body, E)
+        }
+        if (ASTBody[e].Expression.type == "CallExpression") {
+            args += CallExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.args, E)
+        }
+    }
+    body = ""
+    if (ASTBody.length > e + 1) {
+        if (ASTBody[e + 1].type !== "ElseIfStatement" && ASTBody[e + 1].type !== "ElseStatement") {
+            body += "," + ASTBody[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
+        } else {
+            body += "," + ASTBody[e].Expression.test.join("") + ":(" + args + ")"
+        }
+    } else {
+        body += "," + ASTBody[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
+    }
+    return body
+}
+
+function ElseStatementASTToDes(ExpressionBody,ASTBodyExpression) {
+    args = ""
+    for (let E = 0; E < ExpressionBody.length; E++) {
+        if (ExpressionBody[E].Expression.type == "AssignmentExpression") {
+            args += AssignmentExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.body[0].length, ExpressionBody[E].Expression.body, E)
+        }
+        if (ASTBodyExpression.type == "CallExpression") {
+            args += CallExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.args, E)
+        }
+    }
+    body = ""
+    body += "," + args + "\\right\\}"
+    return body
+}
 
 /*
 ██████╗ ███████╗███████╗ ██████╗ ██████╗ ██████╗ ███████╗     ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗██╗     ███████╗██████╗     ███████╗███╗   ██╗██████╗
