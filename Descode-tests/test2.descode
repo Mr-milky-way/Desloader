@@ -1,23 +1,15 @@
-var number AngularVelocity = 0
 var number Angle = 0
-var number FinAngle = Output
 var number Speed = 70
 
 function Test() {
     if (Speed = 0) {
-        Speed = 70;
-        Angle = 10;
-    } else if (Speed >= 70) {
-        Speed = 0;
-        Angle = Angle*10;
-    } else if (Speed = 50) {
-        Angle = Angle*20;
-    } else {
-        Angle = Angle*1;
+        if (Angle = 0) {
+            if (Speed = 90) {
+                Speed = 70;
+                Angle = 10;
+            } else if (Speed = 0) {
+                Test()
+            }
+        }
     }
-    Cool()
-}
-
-function PID() {
-
 }

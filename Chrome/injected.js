@@ -1729,15 +1729,15 @@ function tokentoAST(input) {
                 if (input[e].value == "}") {
                     break
                 } else if (input[e].type == "IDENTIFIER" && input[e + 1].value == "=") {
-                    AssignmentExpression(data, e)
+                    AssignmentExpression(data, input, e)
                 } else if (input[e].type == "IDENTIFIER" && input[e + 1].value == "(") {
-                    CallExpression(data, e)
+                    CallExpression(data, input, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "if") {
-                    e = IfStatement(data, e)
+                    e = IfStatement(data, input, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "else" && input[e + 1].value == "if") {
-                    e = ElseIfStatement(data, e)
+                    e = ElseIfStatement(data, input, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "else" && input[e + 1].value !== "if") {
-                    e = ElseStatement(data, e)
+                    e = ElseStatement(data, input, e)
                     i = e
                 }
             }
@@ -1771,19 +1771,20 @@ function tokentoAST(input) {
                 if (input[e].value == "}") {
                     break
                 } else if (input[e].type == "IDENTIFIER" && input[e + 1].value == "=") {
-                    AssignmentExpression(data, e)
+                    AssignmentExpression(data, input, e)
                 } else if (input[e].type == "IDENTIFIER" && input[e + 1].value == "(") {
-                    CallExpression(data, e)
+                    CallExpression(data, input, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "if") {
-                    e = IfStatement(data, e)
+                    e = IfStatement(data, input, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "else" && input[e + 1].value == "if") {
-                    e = ElseIfStatement(data, e)
+                    e = ElseIfStatement(data, input, e)
                 } else if (input[e].type == "KEYWORD" && input[e].value == "else" && input[e + 1].value !== "if") {
-                    e = ElseStatement(data, e)
+                    e = ElseStatement(data, input, e)
                     i = e
                 }
             }
             AST.push(data)
+            console.log(data)
         }
     }
     // Dev Stuff
@@ -1798,7 +1799,7 @@ function tokentoAST(input) {
     return AST
 }
 
-function AssignmentExpression(FuncJson, number) {
+function AssignmentExpression(FuncJson, input, number) {
     if (input[number].value.length > 1) {
         identifer = input[number].value.slice(0, 1) + "_{" + input[number].value.slice(1) + "}"
     } else {
@@ -1829,10 +1830,10 @@ function AssignmentExpression(FuncJson, number) {
         }
     }
     dat.Expression.body.push(Expression)
-    FuncJson.body.push(dat)
+    FuncJson.Expression.body.push(dat)
 }
 
-function CallExpression(FuncJson, number) {
+function CallExpression(FuncJson, input, number) {
     if (input[number].value.length > 1) {
         identifer = input[number].value.slice(0, 1) + "_{" + input[number].value.slice(1) + "}"
     } else {
@@ -1862,12 +1863,12 @@ function CallExpression(FuncJson, number) {
             args: args
         }
     }
-    FuncJson.body.push(dat)
+    FuncJson.Expression.body.push(dat)
 }
 
-function IfStatement(FuncJson, number) {
-    args = []
-    for (W = number + 2; W < input.length; W++) {
+function IfStatement(FuncJson, input, number) {
+    let args = []
+    for (let W = number + 2; W < input.length; W++) {
         if (input[W].value == ")") {
             i = W
             break
@@ -1882,7 +1883,7 @@ function IfStatement(FuncJson, number) {
             }
         }
     }
-    dato = {
+    let dato = {
         type: "IfStatement",
         Expression: {
             type: "IfStatement",
@@ -1890,27 +1891,35 @@ function IfStatement(FuncJson, number) {
             body: []
         }
     }
+    let E = 0
     for (E = i; E < input.length; E++) {
         if (input[E].value == "}") {
             break
         } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "=") {
-            AssignmentExpression(dato, E)
+            AssignmentExpression(dato, input, E)
         } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "(") {
-            CallExpression(dato, E)
+            CallExpression(dato, input, E)
         } else if (input[E].type == "KEYWORD" && input[E].value == "if") {
-            e = IfStatement(dato, E)
+            E = IfStatement(dato, input, E)
         } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value == "if") {
-            e = ElseIfStatement(dato, E)
+            E = ElseIfStatement(dato, input, E)
         } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value !== "if") {
-            e = ElseStatement(dato, E)
-            i = e
+            E = ElseStatement(dato, input, E)
+            i = E
         }
     }
-    FuncJson.body.push(dato)
+    if (FuncJson.body === undefined) {
+        FuncJson.Expression.body.push(dato)
+        console.log(FuncJson.body)
+        console.log(FuncJson)
+    } else {
+        console.log(FuncJson.body)
+        FuncJson.body.push(dato)
+    }
     return E
 }
 
-function ElseIfStatement(FuncJson, number) {
+function ElseIfStatement(FuncJson, input, number) {
     args = []
     for (W = number + 3; W < input.length; W++) {
         if (input[W].value == ")") {
@@ -1939,23 +1948,30 @@ function ElseIfStatement(FuncJson, number) {
         if (input[E].value == "}") {
             break
         } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "=") {
-            AssignmentExpression(dato, E)
+            AssignmentExpression(dato, input, E)
         } else if (input[E].type == "IDENTIFIER" && input[E + 1].value == "(") {
-            CallExpression(dato, E)
+            CallExpression(dato, input, E)
         } else if (input[E].type == "KEYWORD" && input[E].value == "if") {
-            e = IfStatement(dato, E)
+            E = IfStatement(dato, input, E)
         } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value == "if") {
-            e = ElseIfStatement(dato, E)
+            E = ElseIfStatement(dato, input, E)
         } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value !== "if") {
-            e = ElseStatement(dato, E)
-            i = e
+            E = ElseStatement(dato, input, E)
+            i = E
         }
     }
-    FuncJson.body.push(dato)
+    if (FuncJson.body === undefined) {
+        FuncJson.Expression.body.push(dato)
+        console.log(FuncJson.body)
+        console.log(FuncJson)
+    } else {
+        console.log(FuncJson.body)
+        FuncJson.body.push(dato)
+    }
     return E
 }
 
-function ElseStatement(FuncJson, number) {
+function ElseStatement(FuncJson, input, number) {
     args = []
     dato = {
         type: "ElseStatement",
@@ -1965,25 +1981,33 @@ function ElseStatement(FuncJson, number) {
             body: []
         }
     }
-    for (A = number; A < input.length; A++) {
+    for (let A = number; A < input.length; A++) {
         if (input[A].value == "}") {
             break
         } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "=") {
-            AssignmentExpression(dato, E)
+            AssignmentExpression(dato, input, A)
         } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "(") {
-            CallExpression(dato, E)
-        } else if (input[E].type == "KEYWORD" && input[E].value == "if") {
-            e = IfStatement(dato, E)
-        } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value == "if") {
-            e = ElseIfStatement(dato, E)
-        } else if (input[E].type == "KEYWORD" && input[E].value == "else" && input[E + 1].value !== "if") {
-            e = ElseStatement(dato, E)
-            i = e
+            CallExpression(dato, input, A)
+        } else if (input[A].type == "KEYWORD" && input[A].value == "if") {
+            A = IfStatement(dato, input, A)
+        } else if (input[A].type == "KEYWORD" && input[A].value == "else" && input[A + 1].value == "if") {
+            A = ElseIfStatement(dato, input, A)
+        } else if (input[A].type == "KEYWORD" && input[A].value == "else" && input[A + 1].value !== "if") {
+            A = ElseStatement(dato, input, A)
+            i = A
         }
     }
-    FuncJson.body.push(dato)
+    if (FuncJson.body === undefined) {
+        FuncJson.Expression.body.push(dato)
+        console.log(FuncJson.body)
+        console.log(FuncJson)
+    } else {
+        console.log(FuncJson.body)
+        FuncJson.body.push(dato)
+    }
     return A
 }
+
 
 function ASTToDesmos(AST, calcstate) {
     for (let i = 0; i < AST.length; i++) {
@@ -2181,6 +2205,7 @@ function AssignmentExpressionASTToDes(identifier, length, ExpressionBody, e) {
 }
 
 function IfStatementASTtoDes(ExpressionBody, ASTBody, e) {
+    console.log(ASTBody)
     args = ""
     for (let E = 0; E < ExpressionBody.length; E++) {
         if (ExpressionBody[E].Expression.type == "AssignmentExpression") {
@@ -2240,6 +2265,8 @@ function ElseStatementASTToDes(ExpressionBody,ASTBodyExpression) {
     body += "," + args + "\\right\\}"
     return body
 }
+
+
 
 /*
 ██████╗ ███████╗███████╗ ██████╗ ██████╗ ██████╗ ███████╗     ██████╗ ██████╗ ███╗   ███╗██████╗ ██╗██╗     ███████╗██████╗     ███████╗███╗   ██╗██████╗
