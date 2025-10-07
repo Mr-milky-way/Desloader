@@ -7,8 +7,6 @@ function Test() {
             if (Speed = 90) {
                 Speed = 70;
                 Angle = 10;
-            } else if (Speed = 0) {
-                Test()
             }
         }
     }
