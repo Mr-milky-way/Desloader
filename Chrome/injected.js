@@ -1628,7 +1628,7 @@ function tokenizer(input) {
 function tokentoAST(input) {
     const AST = []
     for (let i = 0; i < input.length; i++) {
-        // Varable stuff
+        // Variable stuff
         if (input[i].type == "KEYWORD" && input[i].value == "var") {
             if (input[i + 1].value == "number") {
                 if (input[i + 2].value.length > 1) {
@@ -1702,7 +1702,7 @@ function tokentoAST(input) {
         }
         // Function stuff
         if (input[i].type == "KEYWORD" && input[i].value == "function") {
-            args = []
+            let args = []
             data = {
                 type: "FunctionDeclaration",
                 FuncName: input[i + 1].value,
@@ -1932,7 +1932,7 @@ function ElseIfStatement(FuncJson, input, number) {
             }
         }
     }
-    dato = {
+    let dato = {
         type: "ElseIfStatement",
         Expression: {
             type: "IfStatement",
@@ -2054,109 +2054,22 @@ function ASTToDesmos(AST, calcstate) {
         }
         // TICKER STUFF--------------------------------------------------------------------------------
         if (AST[i].type == "Ticker") {
-            body = ""
+            let body = ""
             for (let e = 0; e < AST[i].body.length; e++) {
                 if (AST[i].body[e].Expression.type == "AssignmentExpression") {
-                    if (e == 0) {
-                        body = AST[i].body[e].Expression.identifier + "\\to "
-                    } else {
-                        body += "," + AST[i].body[e].Expression.identifier + "\\to "
-                    }
-                    for (let W = 0; W < AST[i].body[e].Expression.body[0].length; W++) {
-                        body += AST[i].body[e].Expression.body[0][W]
-                    }
+                    body += AssignmentExpressionASTToDes(AST[i].body[e].Expression.identifier, AST[i].body[e].Expression.body[0].length, AST[i].body[e].Expression.body, e)
                 }
                 if (AST[i].body[e].Expression.type == "CallExpression") {
-                    if (e == 0) {
-                        body = AST[i].body[e].Expression.identifier + "(" + AST[i].body[e].Expression.args + ")"
-                    } else {
-                        body += "," + AST[i].body[e].Expression.identifier + "(" + AST[i].body[e].Expression.args + ")"
-                    }
+                    body += CallExpressionASTToDes(AST[i].body[e].Expression.identifier, AST[i].body[e].Expression.args, e)
                 }
                 if (AST[i].body[e].Expression.type == "IfStatement" && AST[i].body[e].type == "IfStatement") {
-                    args = ""
-                    for (let E = 0; E < AST[i].body[e].Expression.body.length; E++) {
-                        if (AST[i].body[e].Expression.body[E].Expression.type == "AssignmentExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            }
-                            for (let W = 0; W < AST[i].body[e].Expression.body[E].Expression.body[0].length; W++) {
-                                args += AST[i].body[e].Expression.body[E].Expression.body[0][W]
-                            }
-                        }
-                        if (AST[i].body[e].Expression.type == "CallExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            }
-                        }
-                    }
-                    if (e == 0 && AST[i].body[e + 1].type !== "ElseIfStatement" && AST[i].body[e + 1].type !== "ElseStatement") {
-                        body = "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-                    } else if (AST[i].body[e + 1].type !== "ElseIfStatement" && AST[i].body[e + 1].type !== "ElseStatement") {
-                        body += "," + "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-                    } else if (e == 0) {
-                        body = "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")"
-                    } else {
-                        body += "," + "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")"
-                    }
+                    body += IfStatementASTtoDes(AST[i].body[e].Expression.body, AST[i].body, e)
                 }
                 if (AST[i].body[e].Expression.type == "IfStatement" && AST[i].body[e].type == "ElseIfStatement") {
-                    args = ""
-                    for (let E = 0; E < AST[i].body[e].Expression.body.length; E++) {
-                        if (AST[i].body[e].Expression.body[E].Expression.type == "AssignmentExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            }
-                            for (let W = 0; W < AST[i].body[e].Expression.body[E].Expression.body[0].length; W++) {
-                                args += AST[i].body[e].Expression.body[E].Expression.body[0][W]
-                            }
-                        }
-                        if (AST[i].body[e].Expression.type == "CallExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            }
-                        }
-                    }
-                    if (AST[i].body.length > e + 1) {
-                        if (AST[i].body[e + 1].type !== "ElseIfStatement" && AST[i].body[e + 1].type !== "ElseStatement") {
-                            body += "," + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-                        } else {
-                            body += "," + AST[i].body[e].Expression.test.join("") + ":(" + args + ")"
-                        }
-                    } else {
-                        body += "," + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-                    }
+                    body += ElseIfStatementASTToDes(AST[i].body[e].Expression.body, AST[i].body, e)
                 }
                 if (AST[i].body[e].Expression.type == "IfStatement" && AST[i].body[e].type == "ElseStatement") {
-                    args = ""
-                    for (let E = 0; E < AST[i].body[e].Expression.body.length; E++) {
-                        if (AST[i].body[e].Expression.body[E].Expression.type == "AssignmentExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-                            }
-                            for (let W = 0; W < AST[i].body[e].Expression.body[E].Expression.body[0].length; W++) {
-                                args += AST[i].body[e].Expression.body[E].Expression.body[0][W]
-                            }
-                        }
-                        if (AST[i].body[e].Expression.type == "CallExpression") {
-                            if (E == 0) {
-                                args += AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            } else {
-                                args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-                            }
-                        }
-                    }
-                    body += "," + args + "\\right\\}"
+                    body += ElseStatementASTToDes(AST[i].body[e].Expression.body, AST[i].body[e].Expression)
                 }
             }
             calcstate.expressions.ticker = {
@@ -2234,38 +2147,6 @@ function IfStatementASTtoDes(ExpressionBody, ASTBody, e) {
     return body
 }
 
-/*
-args = ""
-for (let E = 0; E < AST[i].body[e].Expression.body.length; E++) {
-    if (AST[i].body[e].Expression.body[E].Expression.type == "AssignmentExpression") {
-        if (E == 0) {
-            args += AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-        } else {
-            args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "\\to "
-        }
-        for (let W = 0; W < AST[i].body[e].Expression.body[E].Expression.body[0].length; W++) {
-            args += AST[i].body[e].Expression.body[E].Expression.body[0][W]
-        }
-    }
-    if (AST[i].body[e].Expression.body[E].Expression.type == "CallExpression") {
-        if (E == 0) {
-            args += AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-        } else {
-            args += "," + AST[i].body[e].Expression.body[E].Expression.identifier + "(" + AST[i].body[e].Expression.body[E].Expression.args + ")"
-        }
-    }
-}
-if (e == 0 && AST[i].body[e + 1].type !== "ElseIfStatement" && AST[i].body[e + 1].type !== "ElseStatement") {
-    body = "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-} else if (AST[i].body[e + 1].type !== "ElseIfStatement" && AST[i].body[e + 1].type !== "ElseStatement") {
-    body += "," + "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
-} else if (e == 0) {
-    body = "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")"
-} else {
-    body += "," + "\\left\\{" + AST[i].body[e].Expression.test.join("") + ":(" + args + ")"
-}
-*/
-
 function ElseIfStatementASTToDes(ExpressionBody, ASTBody, e) {
     let args = ""
     for (let E = 0; E < ExpressionBody.length; E++) {
@@ -2298,7 +2179,7 @@ function ElseIfStatementASTToDes(ExpressionBody, ASTBody, e) {
     return body
 }
 
-function ElseStatementASTToDes(ExpressionBody, ASTBodyExpression) {
+function ElseStatementASTToDes(ExpressionBody, ASTBodyExpression,) {
     let args = ""
     for (let E = 0; E < ExpressionBody.length; E++) {
         if (ExpressionBody[E].Expression.type == "AssignmentExpression") {
@@ -2306,15 +2187,6 @@ function ElseStatementASTToDes(ExpressionBody, ASTBodyExpression) {
         }
         if (ASTBodyExpression.type == "CallExpression") {
             args += CallExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.args, E)
-        }
-        if (ExpressionBody[E].type == "IfStatement") {
-            args += IfStatementASTtoDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body, E)
-        }
-        if (ExpressionBody[E].type == "ElseIfStatement") {
-            args += ElseIfStatementASTToDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body, E)
-        }
-        if (ExpressionBody[E].type == "ElseStatement") {
-            args += ElseStatementASTToDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body)
         }
     }
     let body = ""

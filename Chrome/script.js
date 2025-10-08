@@ -99,7 +99,7 @@ function run() {
                 <h4><button class="button1" onclick="downloadState(Calc)">Save State</button></h4>
                 <h4>Load State <input class="file1" type="file" id="loadState" accept=".des" /></h4>
                 <div class="3d" id="main_3D">
-                    <h4><button class="button1" onclick="To2d();">Go to 2D</button></h4>
+                    <h4><button class="button1" onclick="To2d();">Go to Code</button></h4>
                     <h4>Load OBJ <input class="file1" type="file" id="loadOBJ" accept=".obj" /></h4>
                     <h4>Load OBJ Optimized <input class="file1" type="file" id="loadOBJ_faster" accept=".obj" /></h4>
                     <h4>Input Texture File (Only work on the most recent OBJ with UV map) <input class="file1" type="file" id="upload" accept="image/png, image/jpeg" /></h4>
