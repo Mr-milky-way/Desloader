@@ -1787,14 +1787,14 @@ function tokentoAST(input) {
         }
     }
     // Dev Stuff
-
+    /*
     const blob = new Blob([JSON.stringify(AST)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "Testdescode.json";
     a.click();
     URL.revokeObjectURL(a.href);
-
+    */
     return AST
 }
 
@@ -1965,8 +1965,8 @@ function ElseIfStatement(FuncJson, input, number) {
 }
 
 function ElseStatement(FuncJson, input, number) {
-    args = []
-    dato = {
+    let args = []
+    let dato = {
         type: "ElseStatement",
         Expression: {
             type: "IfStatement",
@@ -1974,7 +1974,7 @@ function ElseStatement(FuncJson, input, number) {
             body: []
         }
     }
-    for (let A = number; A < input.length; A++) {
+    for (A = number+1; A < input.length; A++) {
         if (input[A].value == "}") {
             break
         } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "=") {
@@ -2198,16 +2198,19 @@ function IfStatementASTtoDes(ExpressionBody, ASTBody, e) {
     let args = ""
     for (let E = 0; E < ExpressionBody.length; E++) {
         if (ExpressionBody[E].Expression.type == "AssignmentExpression") {
-            console.log("AssignmentExpression", E)
             args += AssignmentExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.body[0].length, ExpressionBody[E].Expression.body, E)
         }
         if (ExpressionBody[E].Expression.type == "CallExpression") {
-            console.log("CallExpression", E)
             args += CallExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.args, E)
         }
-        if (ExpressionBody[E].Expression.type == "IfStatement") {
-            console.log("IfStatement", E)
+        if (ExpressionBody[E].type == "IfStatement") {
             args += IfStatementASTtoDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body, E)
+        }
+        if (ExpressionBody[E].type == "ElseIfStatement") {
+            args += ElseIfStatementASTToDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body, E)
+        }
+        if (ExpressionBody[E].type == "ElseStatement") {
+            args += ElseStatementASTToDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body)
         }
     }
     let body = ""
@@ -2222,9 +2225,12 @@ function IfStatementASTtoDes(ExpressionBody, ASTBody, e) {
             body += "," + "\\left\\{" + ASTBody[e].Expression.test.join("") + ":(" + args + ")"
         }
     } else {
-        body = "\\left\\{" + ASTBody[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
+        if (e == 0) {
+            body = "\\left\\{" + ASTBody[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
+        } else {
+            body += "," + ASTBody[e].Expression.test.join("") + ":(" + args + ")\\right\\}"
+        }
     }
-    console.log(body)
     return body
 }
 
@@ -2269,6 +2275,15 @@ function ElseIfStatementASTToDes(ExpressionBody, ASTBody, e) {
         if (ASTBody[e].Expression.type == "CallExpression") {
             args += CallExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.args, E)
         }
+        if (ExpressionBody[E].type == "IfStatement") {
+            args += IfStatementASTtoDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body, E)
+        }
+        if (ExpressionBody[E].type == "ElseIfStatement") {
+            args += ElseIfStatementASTToDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body, E)
+        }
+        if (ExpressionBody[E].type == "ElseStatement") {
+            args += ElseStatementASTToDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body)
+        }
     }
     let body = ""
     if (ASTBody.length > e + 1) {
@@ -2291,6 +2306,15 @@ function ElseStatementASTToDes(ExpressionBody, ASTBodyExpression) {
         }
         if (ASTBodyExpression.type == "CallExpression") {
             args += CallExpressionASTToDes(ExpressionBody[E].Expression.identifier, ExpressionBody[E].Expression.args, E)
+        }
+        if (ExpressionBody[E].type == "IfStatement") {
+            args += IfStatementASTtoDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body, E)
+        }
+        if (ExpressionBody[E].type == "ElseIfStatement") {
+            args += ElseIfStatementASTToDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body, E)
+        }
+        if (ExpressionBody[E].type == "ElseStatement") {
+            args += ElseStatementASTToDes(ExpressionBody[E].Expression.body, ASTBody[e].Expression.body)
         }
     }
     let body = ""
