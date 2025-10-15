@@ -27,8 +27,9 @@ https://github.com/user-attachments/assets/57f4b150-efa5-4e28-8e5f-a6ba74c49dbb
 
 
 ## Installation
-#### Preferred: Install from Webstore (only Firefox for now)
+#### Preferred: Install from Webstore
 You can install DesLoader from the [Firefox Web Store](https://addons.mozilla.org/en-US/firefox/addon/desloader-for-desmos/).
+You can also install DesLoader from the [Chrome Web Store](https://chromewebstore.google.com/detail/desloader-for-desmos/pcpegebkojgbkaclajlbkbmhjcigedpm).
 
 #### Other: Install from ZIP
 For the Most Resent release install the extension from a ZIP file.
@@ -53,9 +54,6 @@ Just copy the bookmarklet.js and add it like any other bookmarklet.
 
 ## How To use
 DesLoader Adds all types of tools to load things into Desmos. DesLoader is to be used mainly with Desmos 3D.
-
-> [!WARNING]
-> DESLOADER NEEDS TO BE USED WITH [DESMODDER](https://github.com/DesModder/DesModder)
 
 Once you have installed DesLoader and DesModder you might see a button in the Top left of your screen that says "Show". This is how you will access the DesLoader menu. Once open you will see a large menu fill the screen That says tools.
 
