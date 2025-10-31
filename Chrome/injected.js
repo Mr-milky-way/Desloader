@@ -20,16 +20,6 @@ const colorVar = document.getElementById("color")
 const VertexName = document.getElementById("VertexName")
 const FaceName = document.getElementById("FaceName")
 
-// Naming and 2d inputs
-const BoxName = document.getElementById("BoxName")
-const BoxSizeX = document.getElementById("BoxSizeX")
-const BoxSizeY = document.getElementById("BoxSizeY")
-const BoxX = document.getElementById("BoxX")
-const BoxY = document.getElementById("BoxY")
-const BoxColor = document.getElementById("BoxColor")
-const BoxOpacity = document.getElementById("BoxOpacity")
-
-
 // Array vars input
 const PosArray = document.getElementById("PosArray")
 const RotArray = document.getElementById("RotArray")
@@ -1435,23 +1425,6 @@ function AddTicker() {
     Calc.setState(state)
 }
 
-function AddBox() {
-    const state = Calc.getState();
-    state.expressions.list.push({
-        type: "expression",
-        id: 1,
-        latex: BoxName.value + "(x,y)=\\min\\left(\\max\\left(\\left|\\frac{x+" + (parseFloat(BoxX.value)) * -1 + "}{" + BoxSizeX.value + "}\\right|^{200}+\\left|\\frac{y+" + (parseFloat(BoxY.value)) * -1 + "}{" + BoxSizeY.value + "}\\right|^{200}-1\\right)\\right)"
-    });
-    state.expressions.list.push({
-        type: "expression",
-        id: 1,
-        colorLatex: BoxColor.value,
-        latex: "0\\ge " + BoxName.value + "\\left(x,y\\right)",
-        fillOpacity: BoxOpacity.value
-    });
-    Calc.setState(state)
-}
-
 
 document.getElementById("loadOBJtale").addEventListener("change", e => {
     const OBJ = e.target.files[0];
@@ -1618,7 +1591,6 @@ function tokenizer(input) {
         } else {
             type = "IDENTIFIER";
         }
-
         tokens.push({ type, value });
     }
 

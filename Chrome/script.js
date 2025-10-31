@@ -125,14 +125,6 @@ function run() {
                 <div class="2d" id="main_2D">
                     <h4><button class="button1" onclick="To3d();">Go to 3D</button></h4>
                     <h4><button class="button1" onclick="AddTicker();">Add starter ticker</button></h4>
-                    <h4><button class="button1" onclick="AddBox();">Add Box</button></h4>
-                    <input class="text1" type="text" id="BoxName" placeholder="BoxName">
-                    <input class="text1" type="text" id="BoxSizeX" placeholder="BoxSizeX">
-                    <input class="text1" type="text" id="BoxSizeY" placeholder="BoxSizeY">
-                    <input class="text1" type="text" id="BoxX" placeholder="BoxX">
-                    <input class="text1" type="text" id="BoxY" placeholder="BoxY">
-                    <input class="text1" type="text" id="BoxColor" placeholder="BoxColor">
-                    <input class="text1" type="text" id="BoxOpacity" placeholder="BoxOpacity">
                     <h4>Load OBJ into table<input class="file1" type="file" id="loadOBJtale" accept=".obj" /></h4>
                     <h4>Import DesCode<input class="file1" type="file" id="loadDesCode" accept=".DesCode" /></h4>
                     <h5>Clear Graph when uploading code? <input type="checkbox" id="CodeClearCheckBox"></h5>

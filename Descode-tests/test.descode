@@ -1,21 +1,21 @@
-var number DeltaTime = 0
-var number Timer = 0
+var number DeltaTime = 0;
+var number Timer = 0;
 
-var number Error = 0
-var number Derivative = 0
-var number PastError = 0
-var number Integral = 0
+var number Error = 0;
+var number Derivative = 0;
+var number PastError = 0;
+var number Integral = 0;
 
-var number P = 0
-var number I = 0
-var number D = 0
+var number P = 0;
+var number I = 0;
+var number D = 0;
 
-var number Speed = 0
-var number AccelRate = 1.01
+var number Speed = 0;
+var number AccelRate = 1.01;
 
-var number GroundResetPoint = 0
+var number GroundResetPoint = 0;
 
-var number MaxMovement = 3
+var number MaxMovement = 3;
 
 var vector InputRight = (4,-4)
 var vector InputLeft = (-4,-4)

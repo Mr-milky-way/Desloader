@@ -1,5 +1,5 @@
-var number Angle = 0
-var number Speed = 70
+var number Angle = 0;
+var number Speed = 70;
 
 function Test() {
     if (Speed = 70) {
