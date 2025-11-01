@@ -1608,10 +1608,17 @@ function tokentoAST(input) {
                 } else {
                     identifer = input[i + 2].value
                 }
+                value = ""
                 if (input[i + 4].value.length > 1 && input[i + 4].type == "IDENTIFIER") {
                     value = input[i + 4].value.slice(0, 1) + "_{" + input[i + 4].value.slice(1) + "}"
                 } else {
-                    value = input[i + 4].value
+                    for (let e = i + 4; e < input.length; e++) {
+                        if (input[e].value == ";") {
+                            break
+                        } else {
+                            value += input[e].value
+                        }
+                    }
                 }
                 data = {
                     type: "VariableDeclarator",
@@ -1801,7 +1808,11 @@ function AssignmentExpression(FuncJson, input, number) {
         }
     }
     dat.Expression.body.push(Expression)
-    FuncJson.Expression.body.push(dat)
+    if (FuncJson.body === undefined) {
+        FuncJson.Expression.body.push(dat)
+    } else {
+        FuncJson.body.push(dat)
+    }
 }
 
 function CallExpression(FuncJson, input, number) {
@@ -1834,7 +1845,11 @@ function CallExpression(FuncJson, input, number) {
             args: args
         }
     }
-    FuncJson.Expression.body.push(dat)
+    if (FuncJson.body === undefined) {
+        FuncJson.Expression.body.push(dat)
+    } else {
+        FuncJson.body.push(dat)
+    }
 }
 
 function IfStatement(FuncJson, input, number) {
@@ -1946,7 +1961,7 @@ function ElseStatement(FuncJson, input, number) {
             body: []
         }
     }
-    for (A = number+1; A < input.length; A++) {
+    for (A = number + 1; A < input.length; A++) {
         if (input[A].value == "}") {
             break
         } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "=") {

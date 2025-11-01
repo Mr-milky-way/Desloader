@@ -17,16 +17,16 @@ var number GroundResetPoint = 0;
 
 var number MaxMovement = 3;
 
-var vector InputRight = (4,-4)
-var vector InputLeft = (-4,-4)
+var vector InputRight = (4,-4);
+var vector InputLeft = (-4,-4);
 
 var vector Groundpos = (0,0,0)
-var array GroundposA = [(Groundpos.x,Groundpos.y,Groundpos.z)]
+var array GroundposA = [(Groundpos.x,Groundpos.y,Groundpos.z)];
 
-var array Roadblocks = [(0,0,100),(0,0,100)]
+var array Roadblocks = [(0,0,100),(0,0,100)];
 
-var vector CarPos = (0,0,0)
-var vector TargetCarPos = (0,0,0)
+var vector CarPos = (0,0,0);
+var vector TargetCarPos = (0,0,0);
 
 function Update() {
     Timer = Timer+DeltaTime;
