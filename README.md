@@ -230,3 +230,5 @@ Full documentation of Descode can be found in the [Here](Documentation/descode.m
 **This is not affiliated with Desmos.**
 
 **Little code has been made with AI.**
+
+**This is up to date for version 0.1.3**

@@ -201,3 +201,7 @@ ticker(0) {
 ```
 
 More tests and examples can be found in the GitHub repository under the `descode-tests` folder.
+
+
+
+**This is up to date for version 0.1.3**
