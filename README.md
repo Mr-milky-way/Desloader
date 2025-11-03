@@ -24,6 +24,7 @@
   - [Basics](#basics)
   - [Important notes](#important-notes)
   - [Full examples](#full-examples)
+  - [Full Documentation](#full-documentation)
 - [Tips](#tips)
 
 # Demo(s)
@@ -208,13 +209,14 @@ ticker(0) {
 - If something is not working as expected and you think it should please open an issue on the GitHub repo.
 - Feel free to suggest new features or changes to Descode by opening an issue on the GitHub repo.
 - Descode is still in early development and may have bugs or missing features.
-- You may need to make additional changes to the desmos graph to get the descode to work as intended IE: In the ticker it might add the variable `dt` as `d_{t}`
-- Full descode documentation may be added at a later date.
+- You may need to make additional changes to the desmos graph to get the descode to work as intended IE: In the ticker it might add the variable `dt` as `d_{t}` in desmos so you would need to change that manually to `dt`.
 
 
 ## Full examples
 Full examples can be found in the Descode-tests folder in the GitHub repo and may need to be worked on to be compatible with the most recent version of DesLoader.
 
+## Full Documentation
+Full documentation of Descode can be found in the [Here](Documentation/descode.md)
 
 # Tips
 
