@@ -2,7 +2,7 @@
   "name": "DesLoader for Desmos",
   "description": "DesLoader Adds all types of tools to load things into Desmos.",
   "manifest_version": 3,
-  "version": "0.1.3",
+  "version": "0.1.4",
   "icons": {
     "48": "DesLoaderIcon.png",
     "128": "DesLoaderIcon.png"
