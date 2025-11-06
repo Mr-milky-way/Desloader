@@ -65,7 +65,7 @@ function GetInput(input) {
 
 function RoadBlocks() {
     if (Groundpos.y <= GroundResetPoint) {
-        Roadblocks = (round(random(2)*6)-3,Groundpos.y+2,1);
+        Roadblocks = (Math.round(Math.random(2)*6)-3,Groundpos.y+2,1);
     } else {
         Roadblocks = (Roadblocks.x,Groundpos.y,Roadblocks.z);
     }
@@ -78,5 +78,5 @@ function SpeedUp() {
 
 ticker(0) {
     Update()
-    DeltaTime = dt;
+    DeltaTime = Math.dt;
 }

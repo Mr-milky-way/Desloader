@@ -1562,7 +1562,8 @@ document.getElementById("loadDesCode").addEventListener("change", e => {
         const state = Calc.getState();
         const text = Code.target.result;
         const tokens = tokenizer(text);
-        const AST = tokentoAST(tokens)
+        const processedTokens = tokenProcesser(tokens);
+        const AST = tokentoAST(processedTokens)
         ASTToDesmos(AST, state)
         e.target.value = "";
     }
@@ -1584,8 +1585,10 @@ function tokenizer(input) {
             type = "OPERATOR";
         } else if (["(", ")", "{", "}", ";", "[", "]", ",", "."].includes(value)) {
             type = "PUNCTUATION";
-        } else if (["if", "var", "function", "else", "ticker", "random", "round", "sign", "polygon", "max", "min", "mod", "with", "sin", "cos", "tan", "csc", "sec", "cot", "mean", "meadian", "quartile", "shuffle", "midpoint", "floor", "ceil", "distance", "count", "total", "mad", "stats", "estimate"].includes(value)) {
+        } else if (["if", "var", "function", "else", "ticker","Math"].includes(value)) {
             type = "KEYWORD";
+        } else if (["random","round","sign", "polygon", "max", "min", "mod", "with", "sin", "cos", "tan", "csc", "sec", "cot", "mean", "meadian", "quartile", "shuffle", "midpoint", "floor", "ceil", "distance", "count", "total", "mad", "stats", "estimate","dt"].includes(value)) {
+            type = "OPERATOR REPLACEMENT";
         } else if (["number", "array", "vector"].includes(value)) {
             type = "VARABLE IDENTIFIER";
         } else {
@@ -1595,6 +1598,77 @@ function tokenizer(input) {
     }
 
     return tokens;
+}
+
+function tokenProcesser(input) { 
+    for (let i = 0; i < input.length; i++) {
+        if (input.type[i-1] == "PUNCTUATION" && input.value[i-1] == "." && input.type[i-2] == "KEYWORD" && input.value[i-2] == "Math") {
+            if (input.type[i] == "OPERATOR REPLACEMENT") {
+                if (input.value[i] == "random") {
+                    input.value[i] = "\\operatorname{random}"
+                } else if (input.value[i] == "round") {
+                    input.value[i] = "\\operatorname{round}"
+                } else if (input.value[i] == "sign") {
+                    input.value[i] = "\\operatorname{sign}"
+                } else if (input.value[i] == "polygon") {
+                    input.value[i] = "\\operatorname{polygon}"
+                } else if (input.value[i] == "max") {
+                    input.value[i] = "\\max"
+                } else if (input.value[i] == "min") {
+                    input.value[i] = "\\min"
+                } else if (input.value[i] == "mod") {
+                    input.value[i] = "\\operatorname{mod}"
+                } else if (input.value[i] == "with") {
+                    input.value[i] = "\\operatorname{with}"
+                } else if (input.value[i] == "sin") {
+                    input.value[i] = "\\sin"
+                } else if (input.value[i] == "cos") {
+                    input.value[i] = "\\cos"
+                } else if (input.value[i] == "tan") {
+                    input.value[i] = "\\tan"
+                } else if (input.value[i] == "csc") {
+                    input.value[i] = "\\csc"
+                } else if (input.value[i] == "sec") {
+                    input.value[i] = "\\sec"
+                } else if (input.value[i] == "cot") {
+                    input.value[i] = "\\cot"
+                } else if (input.value[i] == "mean") {
+                    input.value[i] = "\\operatorname{mean}"
+                } else if (input.value[i] == "meadian") {
+                    input.value[i] = "\\operatorname{meadian}"
+                } else if (input.value[i] == "quartile") {
+                    input.value[i] = "\\operatorname{quartile}"
+                } else if (input.value[i] == "shuffle") {
+                    input.value[i] = "\\operatorname{shuffle}"
+                } else if (input.value[i] == "midpoint") {
+                    input.value[i] = "\\operatorname{midpoint}"
+                } else if (input.value[i] == "floor") {
+                    input.value[i] = "\\operatorname{floor}"
+                } else if (input.value[i] == "ceil") {
+                    input.value[i] = "\\operatorname{ceil}"
+                } else if (input.value[i] == "distance") {
+                    input.value[i] = "\\operatorname{distance}"
+                } else if (input.value[i] == "count") {
+                    input.value[i] = "\\operatorname{count}"
+                } else if (input.value[i] == "total") {
+                    input.value[i] = "\\operatorname{total}"
+                } else if (input.value[i] == "mad") {
+                    input.value[i] = "\\operatorname{mad}"
+                } else if (input.value[i] == "stats") {
+                    input.value[i] = "\\operatorname{stats}"
+                } else if (input.value[i] == "estimate") {
+                    input.value[i] = "\\operatorname{estimate}"
+                } else if (input.value[i] == "dt") {
+                    input.value[i] = "\\operatorname{dt}"
+                }
+                input[i-2] = null
+                input[i-1] = null
+            }
+        } else {
+            input.type[i] = "IDENTIFIER"
+        }
+    }
+    return input;
 }
 
 function tokentoAST(input) {
