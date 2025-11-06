@@ -1559,11 +1559,11 @@ document.getElementById("loadDesCode").addEventListener("change", e => {
         if (CodeClearCheckBox.checked) {
             Calc.setBlank();
         }
-        const state = Calc.getState();
-        const text = Code.target.result;
-        const tokens = tokenizer(text);
-        const processedTokens = tokenProcesser(tokens);
-        const AST = tokentoAST(processedTokens)
+        let state = Calc.getState();
+        let text = Code.target.result;
+        let tokens = tokenizer(text);
+        let processedTokens = tokenProcessor(tokens);
+        let AST = tokentoAST(processedTokens)
         ASTToDesmos(AST, state)
         e.target.value = "";
     }
@@ -1581,13 +1581,13 @@ function tokenizer(input) {
 
         if (/^\d+$/.test(value)) {
             type = "NUMBER";
-        } else if (["+", "-", "*", "/", "=", "^", "<", ">", ""].includes(value)) {
+        } else if (["+", "-", "*", "/", "=", "^", "<", ">"].includes(value)) {
             type = "OPERATOR";
         } else if (["(", ")", "{", "}", ";", "[", "]", ",", "."].includes(value)) {
             type = "PUNCTUATION";
         } else if (["if", "var", "function", "else", "ticker","Math"].includes(value)) {
             type = "KEYWORD";
-        } else if (["random","round","sign", "polygon", "max", "min", "mod", "with", "sin", "cos", "tan", "csc", "sec", "cot", "mean", "meadian", "quartile", "shuffle", "midpoint", "floor", "ceil", "distance", "count", "total", "mad", "stats", "estimate","dt"].includes(value)) {
+        } else if (["random","round","sign", "polygon", "max", "min", "mod", "with", "sin", "cos", "tan", "csc", "sec", "cot", "mean", "meadian", "quartile", "shuffle", "midpoint", "floor", "ceil", "distance", "count", "total", "mad", "stats", "estimate","dt", "median"].includes(value)) {
             type = "OPERATOR REPLACEMENT";
         } else if (["number", "array", "vector"].includes(value)) {
             type = "VARABLE IDENTIFIER";
@@ -1600,72 +1600,79 @@ function tokenizer(input) {
     return tokens;
 }
 
-function tokenProcesser(input) { 
+function tokenProcessor(input) { 
     for (let i = 0; i < input.length; i++) {
-        if (input.type[i-1] == "PUNCTUATION" && input.value[i-1] == "." && input.type[i-2] == "KEYWORD" && input.value[i-2] == "Math") {
-            if (input.type[i] == "OPERATOR REPLACEMENT") {
-                if (input.value[i] == "random") {
-                    input.value[i] = "\\operatorname{random}"
-                } else if (input.value[i] == "round") {
-                    input.value[i] = "\\operatorname{round}"
-                } else if (input.value[i] == "sign") {
-                    input.value[i] = "\\operatorname{sign}"
-                } else if (input.value[i] == "polygon") {
-                    input.value[i] = "\\operatorname{polygon}"
-                } else if (input.value[i] == "max") {
-                    input.value[i] = "\\max"
-                } else if (input.value[i] == "min") {
-                    input.value[i] = "\\min"
-                } else if (input.value[i] == "mod") {
-                    input.value[i] = "\\operatorname{mod}"
-                } else if (input.value[i] == "with") {
-                    input.value[i] = "\\operatorname{with}"
-                } else if (input.value[i] == "sin") {
-                    input.value[i] = "\\sin"
-                } else if (input.value[i] == "cos") {
-                    input.value[i] = "\\cos"
-                } else if (input.value[i] == "tan") {
-                    input.value[i] = "\\tan"
-                } else if (input.value[i] == "csc") {
-                    input.value[i] = "\\csc"
-                } else if (input.value[i] == "sec") {
-                    input.value[i] = "\\sec"
-                } else if (input.value[i] == "cot") {
-                    input.value[i] = "\\cot"
-                } else if (input.value[i] == "mean") {
-                    input.value[i] = "\\operatorname{mean}"
-                } else if (input.value[i] == "meadian") {
-                    input.value[i] = "\\operatorname{meadian}"
-                } else if (input.value[i] == "quartile") {
-                    input.value[i] = "\\operatorname{quartile}"
-                } else if (input.value[i] == "shuffle") {
-                    input.value[i] = "\\operatorname{shuffle}"
-                } else if (input.value[i] == "midpoint") {
-                    input.value[i] = "\\operatorname{midpoint}"
-                } else if (input.value[i] == "floor") {
-                    input.value[i] = "\\operatorname{floor}"
-                } else if (input.value[i] == "ceil") {
-                    input.value[i] = "\\operatorname{ceil}"
-                } else if (input.value[i] == "distance") {
-                    input.value[i] = "\\operatorname{distance}"
-                } else if (input.value[i] == "count") {
-                    input.value[i] = "\\operatorname{count}"
-                } else if (input.value[i] == "total") {
-                    input.value[i] = "\\operatorname{total}"
-                } else if (input.value[i] == "mad") {
-                    input.value[i] = "\\operatorname{mad}"
-                } else if (input.value[i] == "stats") {
-                    input.value[i] = "\\operatorname{stats}"
-                } else if (input.value[i] == "estimate") {
-                    input.value[i] = "\\operatorname{estimate}"
-                } else if (input.value[i] == "dt") {
-                    input.value[i] = "\\operatorname{dt}"
+        if (input[i].type == "OPERATOR") {
+            if (input[i].value == "*") {
+                input[i].value = "\\cdot"
+            }
+        }
+        if (input[i-1].type == "PUNCTUATION" && input[i-1].value == "." && input[i-2].type == "KEYWORD" && input[i-2].value == "Math") {
+            if (input[i].type == "OPERATOR REPLACEMENT") {
+                if (input[i].value == "random") {
+                    input[i].value = "\\operatorname{random}"
+                } else if (input[i].value == "round") {
+                    input[i].value = "\\operatorname{round}"
+                } else if (input[i].value == "sign") {
+                    input[i].value = "\\operatorname{sign}"
+                } else if (input[i].value == "polygon") {
+                    input[i].value = "\\operatorname{polygon}"
+                } else if (input[i].value == "max") {
+                    input[i].value = "\\max"
+                } else if (input[i].value == "min") {
+                    input[i].value = "\\min"
+                } else if (input[i].value == "mod") {
+                    input[i].value = "\\operatorname{mod}"
+                } else if (input[i].value == "with") {
+                    input[i].value = "\\operatorname{with}"
+                } else if (input[i].value == "sin") {
+                    input[i].value = "\\sin"
+                } else if (input[i].value == "cos") {
+                    input[i].value = "\\cos"
+                } else if (input[i].value == "tan") {
+                    input[i].value = "\\tan"
+                } else if (input[i].value == "csc") {
+                    input[i].value = "\\csc"
+                } else if (input[i].value == "sec") {
+                    input[i].value = "\\sec"
+                } else if (input[i].value == "cot") {
+                    input[i].value = "\\cot"
+                } else if (input[i].value == "mean") {
+                    input[i].value = "\\operatorname{mean}"
+                } else if (input[i].value == "meadian") {
+                    input[i].value = "\\operatorname{meadian}"
+                } else if (input[i].value == "quartile") {
+                    input[i].value = "\\operatorname{quartile}"
+                } else if (input[i].value == "shuffle") {
+                    input[i].value = "\\operatorname{shuffle}"
+                } else if (input[i].value == "midpoint") {
+                    input[i].value = "\\operatorname{midpoint}"
+                } else if (input[i].value == "floor") {
+                    input[i].value = "\\operatorname{floor}"
+                } else if (input[i].value == "ceil") {
+                    input[i].value = "\\operatorname{ceil}"
+                } else if (input[i].value == "distance") {
+                    input[i].value = "\\operatorname{distance}"
+                } else if (input[i].value == "count") {
+                    input[i].value = "\\operatorname{count}"
+                } else if (input[i].value == "total") {
+                    input[i].value = "\\operatorname{total}"
+                } else if (input[i].value == "mad") {
+                    input[i].value = "\\operatorname{mad}"
+                } else if (input[i].value == "stats") {
+                    input[i].value = "\\operatorname{stats}"
+                } else if (input[i].value == "estimate") {
+                    input[i].value = "\\operatorname{estimate}"
+                } else if (input[i].value == "dt") {
+                    input[i].value = "\\operatorname{dt}"
+                } else if (input[i].value == "median") {
+                    input[i].value = "\\operatorname{median}"
                 }
                 input[i-2] = null
                 input[i-1] = null
             }
         } else {
-            input.type[i] = "IDENTIFIER"
+            input[i].type = "IDENTIFIER"
         }
     }
     return input;
@@ -1683,15 +1690,13 @@ function tokentoAST(input) {
                     identifer = input[i + 2].value
                 }
                 value = ""
-                if (input[i + 4].value.length > 1 && input[i + 4].type == "IDENTIFIER") {
-                    value = input[i + 4].value.slice(0, 1) + "_{" + input[i + 4].value.slice(1) + "}"
-                } else {
-                    for (let e = i + 4; e < input.length; e++) {
-                        if (input[e].value == ";") {
-                            break
-                        } else {
-                            value += input[e].value
-                        }
+                for (let e = i + 4; e < input.length; e++) {
+                    if (input[e].value == ";") {
+                        break
+                    } else if (input[e].type == "IDENTIFIER" && input[e].value.length > 1) {
+                        value += input[e].value.slice(0, 1) + "_{" + input[e].value.slice(1) + "}"
+                    } else {
+                        value += input[e].value
                     }
                 }
                 data = {
