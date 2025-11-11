@@ -20,8 +20,8 @@ var number MaxMovement = 3;
 var vector InputRight = (4,-4);
 var vector InputLeft = (-4,-4);
 
-var vector Groundpos = (0,0,0)
-var array GroundposA = [(Groundpos.x,Groundpos.y,Groundpos.z)];
+var vector GroundPos = (0,0,0)
+var array GroundPosA = [(GroundPos.x,GroundPos.y,GroundPos.z)];
 
 var array Roadblocks = [(0,0,100),(0,0,100)];
 
@@ -46,10 +46,10 @@ function UpdateCarPos() {
 }
 
 function moveGround() {
-    if (Groundpos.y <= GroundResetPoint) {
-        Groundpos = (0,-GroundResetPoint,0);
+    if (GroundPos.y <= GroundResetPoint) {
+        GroundPos = (0,-GroundResetPoint,0);
     } else {
-        Groundpos = (0,Groundpos.y-1*Speed,0);
+        GroundPos = (0,GroundPos.y-1*Speed,0);
     }
 }
 
@@ -64,10 +64,10 @@ function GetInput(input) {
 }
 
 function RoadBlocks() {
-    if (Groundpos.y <= GroundResetPoint) {
-        Roadblocks = (Math.round(Math.random(2)*6)-3,Groundpos.y+2,1);
+    if (GroundPos.y <= GroundResetPoint) {
+        Roadblocks = (Math.round(Math.random(2)*6)-3,GroundPos.y+2,1);
     } else {
-        Roadblocks = (Roadblocks.x,Groundpos.y,Roadblocks.z);
+        Roadblocks = (Roadblocks.x,GroundPos.y,Roadblocks.z);
     }
 }
 

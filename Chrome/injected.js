@@ -1,6 +1,6 @@
 // Menu UI bit
-const maindiv = document.getElementById("main_bit")
-const showdiv = document.getElementById("show_bit")
+const mainDiv = document.getElementById("main_bit")
+const showDiv = document.getElementById("show_bit")
 const ThreeDiv = document.getElementById("main_3D")
 const TwoDiv = document.getElementById("main_2D")
 
@@ -8,9 +8,9 @@ const TwoDiv = document.getElementById("main_2D")
 const UVmapCheckBox = document.getElementById("UVmapCheckBox")
 const PosArrayCheckBox = document.getElementById("PosArrayCheckBox")
 const RotArrayCheckBox = document.getElementById("RotArrayCheckBox")
-const XreflectionCheckBox = document.getElementById("XCheckBox")
-const YreflectionCheckBox = document.getElementById("YCheckBox")
-const ZreflectionCheckBox = document.getElementById("ZCheckBox")
+const XReflectionCheckBox = document.getElementById("XCheckBox")
+const YReflectionCheckBox = document.getElementById("YCheckBox")
+const ZReflectionCheckBox = document.getElementById("ZCheckBox")
 const RemoveTriLimitCheckBox = document.getElementById("RemoveTriLimitCheckBox")
 const ScaleArrayCheckBox = document.getElementById("ScaleArrayCheckBox")
 const CodeClearCheckBox = document.getElementById("CodeClearCheckBox")
@@ -48,13 +48,13 @@ function getRandomInt(min, max) {
 ╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝     ╚══════╝   ╚═╝    ╚═════╝ ╚═╝     ╚═╝         ╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝
 */
 
-maindiv.style.display = 'none';
+mainDiv.style.display = 'none';
 TwoDiv.style.display = 'none';
-showdiv.style.display = null;
+showDiv.style.display = null;
 
 function hide() {
-    maindiv.style.display = 'none';
-    showdiv.style.display = null;
+    mainDiv.style.display = 'none';
+    showDiv.style.display = null;
 }
 
 
@@ -69,8 +69,8 @@ function To2d() {
 }
 
 function show() {
-    maindiv.style.display = null;
-    showdiv.style.display = 'none';
+    mainDiv.style.display = null;
+    showDiv.style.display = 'none';
 }
 
 /*
@@ -133,18 +133,18 @@ document.getElementById("loadOBJ").addEventListener("change", e => {
         const Vertexes = lines.filter(line => line.startsWith('v '));
         UVs = lines.filter(line => line.startsWith('vt '));
         for (let i = 0; i < Vertexes.length; i++) {
-            Vlines = []
-            Vline = Vertexes[i].substr(2)
-            Vline = Vline.split(' ');
-            Vlines.push("(" + Vline[0], Vline[1], Vline[2] + ")")
-            Vertexes[i] = Vlines
+            let VertexLines = []
+            let VertexLine = Vertexes[i].substr(2)
+            VertexLine = VertexLine.split(' ');
+            VertexLines.push("(" + VertexLine[0], VertexLine[1], VertexLine[2] + ")")
+            Vertexes[i] = VertexLines
         }
         for (let i = 0; i < UVs.length; i++) {
-            Vlines = []
-            Vline = UVs[i].substr(3)
-            Vline = Vline.split(' ');
-            Vlines.push(Vline[0], 1 - Vline[1])
-            UVs[i] = Vlines
+            let VLines = []
+            let UVLine = UVs[i].substr(3)
+            UVLine = UVLine.split(' ');
+            VLines.push(UVLine[0], 1 - UVLine[1])
+            UVs[i] = VLines
         }
         const Faces = lines.filter(line => line.startsWith('f'));
         Facess = [];
@@ -301,16 +301,16 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
         UVs = lines.filter(line => line.startsWith('vt '));
         for (let i = 0; i < Vertexes.length; i++) {
             Vlines = []
-            Vline = Vertexes[i].substr(2)
-            Vline = Vline.split(' ');
-            Vlines.push("(" + Vline[0], Vline[1], Vline[2] + ")")
+            UVLine = Vertexes[i].substr(2)
+            UVLine = UVLine.split(' ');
+            Vlines.push("(" + UVLine[0], UVLine[1], UVLine[2] + ")")
             Vertexes[i] = Vlines
         }
         for (let i = 0; i < UVs.length; i++) {
             Vlines = []
-            Vline = UVs[i].substr(3)
-            Vline = Vline.split(' ');
-            Vlines.push(Vline[0], 1 - Vline[1])
+            UVLine = UVs[i].substr(3)
+            UVLine = UVLine.split(' ');
+            Vlines.push(UVLine[0], 1 - UVLine[1])
             UVs[i] = Vlines
         }
         const Faces = lines.filter(line => line.startsWith('f'));
@@ -590,7 +590,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 latex: "\\operatorname{triangle}((((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.x]+" + PosArray.value + "[" + (i + 1) + "],(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.y]+" + PosArray.value + "[" + (i + 1) + "],(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.z]+" + PosArray.value + "[" + (i + 1) + "])",
                                 colorLatex: "C_{" + C[x] + "}"
                             });
-                            if (YreflectionCheckBox.checked == true) {
+                            if (YReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -600,7 +600,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: "C_{" + C[x] + "}"
                                 });
                             }
-                            if (XreflectionCheckBox.checked == true) {
+                            if (XReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -610,7 +610,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: "C_{" + C[x] + "}"
                                 });
                             }
-                            if (ZreflectionCheckBox.checked == true) {
+                            if (ZReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -631,7 +631,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 latex: "\\operatorname{triangle}((((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.x]+" + PosArray.value + "[" + (i + 1) + "],(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.y]+" + PosArray.value + "[" + (i + 1) + "],(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.z]+" + PosArray.value + "[" + (i + 1) + "])",
                                 colorLatex: colorVar.value,
                             });
-                            if (YreflectionCheckBox.checked == true) {
+                            if (YReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -641,7 +641,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: colorVar.value,
                                 });
                             }
-                            if (XreflectionCheckBox.checked == true) {
+                            if (XReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -651,7 +651,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: colorVar.value,
                                 });
                             }
-                            if (ZreflectionCheckBox.checked == true) {
+                            if (ZReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -699,7 +699,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 latex: "\\operatorname{triangle}((((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.x],(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.y],(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.z])",
                                 colorLatex: "C_{" + C[x] + "}"
                             });
-                            if (YreflectionCheckBox.checked == true) {
+                            if (YReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -709,7 +709,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: "C_{" + C[x] + "}"
                                 });
                             }
-                            if (XreflectionCheckBox.checked == true) {
+                            if (XReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -719,7 +719,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: "C_{" + C[x] + "}"
                                 });
                             }
-                            if (ZreflectionCheckBox.checked == true) {
+                            if (ZReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -740,7 +740,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 latex: "\\operatorname{triangle}((((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.x],(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.y],(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((F_{" + f[x] + "}.x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+F_{" + f[x] + "}.y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+F_{" + f[x] + "}.z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(F_{" + f[x] + "}.x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+F_{" + f[x] + "}.z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[V_{" + v[x] + "}.z])",
                                 colorLatex: colorVar.value,
                             });
-                            if (YreflectionCheckBox.checked == true) {
+                            if (YReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -750,7 +750,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: colorVar.value,
                                 });
                             }
-                            if (XreflectionCheckBox.checked == true) {
+                            if (XReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -760,7 +760,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: colorVar.value,
                                 });
                             }
-                            if (ZreflectionCheckBox.checked == true) {
+                            if (ZReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -808,7 +808,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 latex: "\\operatorname{triangle}((((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".x]+" + PosArray.value + "[" + (i + 1) + "],(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".y]+" + PosArray.value + "[" + (i + 1) + "],(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".z]+" + PosArray.value + "[" + (i + 1) + "])",
                                 colorLatex: "C_{" + C[0] + "}"
                             });
-                            if (YreflectionCheckBox.checked == true) {
+                            if (YReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -818,7 +818,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: "C_{" + C[0] + "}"
                                 });
                             }
-                            if (XreflectionCheckBox.checked == true) {
+                            if (XReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -828,7 +828,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: "C_{" + C[0] + "}"
                                 });
                             }
-                            if (ZreflectionCheckBox.checked == true) {
+                            if (ZReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -849,7 +849,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 latex: "\\operatorname{triangle}((((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".x]+" + PosArray.value + "[" + (i + 1) + "],(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".y]+" + PosArray.value + "[" + (i + 1) + "],(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x\\cdot(" + ScaleArray.value + "[" + (i + 1) + "]))\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\cdot(" + ScaleArray.value + "[" + (i + 1) + "])\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".z]+" + PosArray.value + "[" + (i + 1) + "])",
                                 colorLatex: colorVar.value,
                             });
-                            if (YreflectionCheckBox.checked == true) {
+                            if (YReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -859,7 +859,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: colorVar.value,
                                 });
                             }
-                            if (XreflectionCheckBox.checked == true) {
+                            if (XReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -869,7 +869,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: colorVar.value,
                                 });
                             }
-                            if (ZreflectionCheckBox.checked == true) {
+                            if (ZReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -893,7 +893,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 latex: "\\operatorname{triangle}((((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".x]+" + PosArray.value + "[" + (i + 1) + "],(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".y]+" + PosArray.value + "[" + (i + 1) + "],(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".z]+" + PosArray.value + "[" + (i + 1) + "])",
                                 colorLatex: "C_{" + C[0] + "}"
                             });
-                            if (YreflectionCheckBox.checked == true) {
+                            if (YReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -903,7 +903,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: "C_{" + C[0] + "}"
                                 });
                             }
-                            if (XreflectionCheckBox.checked == true) {
+                            if (XReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -913,7 +913,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: "C_{" + C[0] + "}"
                                 });
                             }
-                            if (ZreflectionCheckBox.checked == true) {
+                            if (ZReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -934,7 +934,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 latex: "\\operatorname{triangle}((((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".x]+" + PosArray.value + "[" + (i + 1) + "],(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".y]+" + PosArray.value + "[" + (i + 1) + "],(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".z]+" + PosArray.value + "[" + (i + 1) + "])",
                                 colorLatex: colorVar.value,
                             });
-                            if (YreflectionCheckBox.checked == true) {
+                            if (YReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -944,7 +944,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: colorVar.value,
                                 });
                             }
-                            if (XreflectionCheckBox.checked == true) {
+                            if (XReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -954,7 +954,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                     colorLatex: colorVar.value,
                                 });
                             }
-                            if (ZreflectionCheckBox.checked == true) {
+                            if (ZReflectionCheckBox.checked == true) {
                                 state.expressions.list.push({
                                     type: "expression",
                                     id: getRandomInt(1, 10000).toString(),
@@ -1004,7 +1004,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                             latex: "\\operatorname{triangle}((((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".x],(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".y],(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".z])",
                             colorLatex: "C_{" + C[0] + "}"
                         });
-                        if (YreflectionCheckBox.checked == true) {
+                        if (YReflectionCheckBox.checked == true) {
                             state.expressions.list.push({
                                 type: "expression",
                                 id: getRandomInt(1, 10000).toString(),
@@ -1014,7 +1014,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 colorLatex: "C_{" + C[0] + "}"
                             });
                         }
-                        if (XreflectionCheckBox.checked == true) {
+                        if (XReflectionCheckBox.checked == true) {
                             state.expressions.list.push({
                                 type: "expression",
                                 id: getRandomInt(1, 10000).toString(),
@@ -1024,7 +1024,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 colorLatex: "C_{" + C[0] + "}"
                             });
                         }
-                        if (ZreflectionCheckBox.checked == true) {
+                        if (ZReflectionCheckBox.checked == true) {
                             state.expressions.list.push({
                                 type: "expression",
                                 id: getRandomInt(1, 10000).toString(),
@@ -1045,7 +1045,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                             latex: "\\operatorname{triangle}((((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".x],(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".y],(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)-\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)+\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].z))),(((" + FaceName.value + ".x)\\cos(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+" + FaceName.value + ".y(\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)+\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z))+" + FaceName.value + ".z(\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\sin(" + RotArray.value + "[" + (i + 1) + "].y)\\sin(" + RotArray.value + "[" + (i + 1) + "].z)-\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cos(" + RotArray.value + "[" + (i + 1) + "].z)))),((-(" + FaceName.value + ".x)\\cdot\\sin(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".y\\cos(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y)+" + FaceName.value + ".z\\sin(" + RotArray.value + "[" + (i + 1) + "].x+90)\\cdot\\cos(" + RotArray.value + "[" + (i + 1) + "].y))))[" + VertexName.value + ".z])",
                             colorLatex: colorVar.value,
                         });
-                        if (YreflectionCheckBox.checked == true) {
+                        if (YReflectionCheckBox.checked == true) {
                             state.expressions.list.push({
                                 type: "expression",
                                 id: getRandomInt(1, 10000).toString(),
@@ -1055,7 +1055,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 colorLatex: colorVar.value,
                             });
                         }
-                        if (XreflectionCheckBox.checked == true) {
+                        if (XReflectionCheckBox.checked == true) {
                             state.expressions.list.push({
                                 type: "expression",
                                 id: getRandomInt(1, 10000).toString(),
@@ -1065,7 +1065,7 @@ document.getElementById("loadOBJ_faster").addEventListener("change", e => {
                                 colorLatex: colorVar.value,
                             });
                         }
-                        if (ZreflectionCheckBox.checked == true) {
+                        if (ZReflectionCheckBox.checked == true) {
                             state.expressions.list.push({
                                 type: "expression",
                                 id: getRandomInt(1, 10000).toString(),
@@ -1117,8 +1117,8 @@ document.getElementById("LoadArray").addEventListener("change", e => {
         const lines = text.split('\n');
         for (let i = 0; i < lines.length; i++) {
             Vlines = []
-            Vline = lines[i].split(',');
-            Vlines.push("(" + Vline[0], Vline[1], Vline[2] + ")")
+            UVLine = lines[i].split(',');
+            Vlines.push("(" + UVLine[0], UVLine[1], UVLine[2] + ")")
             lines[i] = Vlines
         }
 
@@ -1451,13 +1451,13 @@ document.getElementById("loadOBJtale").addEventListener("change", e => {
         else {
             for (let i = 0; i < Vertexes.length; i++) {
                 Vlines = []
-                Vline = Vertexes[i].substr(2)
-                Vline = Vline.split(' ');
-                Vlines.push("(" + Vline[0], Vline[1], Vline[2] + ")")
+                UVLine = Vertexes[i].substr(2)
+                UVLine = UVLine.split(' ');
+                Vlines.push("(" + UVLine[0], UVLine[1], UVLine[2] + ")")
                 N[i] = ""
-                X[i] = Vline[0]
-                Y[i] = Vline[1]
-                Z[i] = Vline[2]
+                X[i] = UVLine[0]
+                Y[i] = UVLine[1]
+                Z[i] = UVLine[2]
                 Vertexes[i] = Vlines
             }
             Facess = [];
@@ -1585,9 +1585,9 @@ function tokenizer(input) {
             type = "OPERATOR";
         } else if (["(", ")", "{", "}", ";", "[", "]", ",", "."].includes(value)) {
             type = "PUNCTUATION";
-        } else if (["if", "var", "function", "else", "ticker","Math"].includes(value)) {
+        } else if (["if", "var", "function", "else", "ticker", "Math"].includes(value)) {
             type = "KEYWORD";
-        } else if (["random","round","sign", "polygon", "max", "min", "mod", "with", "sin", "cos", "tan", "csc", "sec", "cot", "mean", "meadian", "quartile", "shuffle", "midpoint", "floor", "ceil", "distance", "count", "total", "mad", "stats", "estimate","dt", "median"].includes(value)) {
+        } else if (["random", "round", "sign", "polygon", "max", "min", "mod", "with", "sin", "cos", "tan", "csc", "sec", "cot", "mean", "meadian", "quartile", "shuffle", "midpoint", "floor", "ceil", "distance", "count", "total", "mad", "stats", "estimate", "dt", "median"].includes(value)) {
             type = "OPERATOR REPLACEMENT";
         } else if (["number", "array", "vector"].includes(value)) {
             type = "VARABLE IDENTIFIER";
@@ -1600,81 +1600,81 @@ function tokenizer(input) {
     return tokens;
 }
 
-function tokenProcessor(input) { 
+function tokenProcessor(input) {
     for (let i = 0; i < input.length; i++) {
         if (input[i].type == "OPERATOR") {
             if (input[i].value == "*") {
-                input[i].value = "\\cdot"
+                input[i].value = "\\cdot "
             }
         }
-        if (input[i-1].type == "PUNCTUATION" && input[i-1].value == "." && input[i-2].type == "KEYWORD" && input[i-2].value == "Math") {
-            if (input[i].type == "OPERATOR REPLACEMENT") {
-                if (input[i].value == "random") {
-                    input[i].value = "\\operatorname{random}"
-                } else if (input[i].value == "round") {
-                    input[i].value = "\\operatorname{round}"
-                } else if (input[i].value == "sign") {
-                    input[i].value = "\\operatorname{sign}"
-                } else if (input[i].value == "polygon") {
-                    input[i].value = "\\operatorname{polygon}"
-                } else if (input[i].value == "max") {
-                    input[i].value = "\\max"
-                } else if (input[i].value == "min") {
-                    input[i].value = "\\min"
-                } else if (input[i].value == "mod") {
-                    input[i].value = "\\operatorname{mod}"
-                } else if (input[i].value == "with") {
-                    input[i].value = "\\operatorname{with}"
-                } else if (input[i].value == "sin") {
-                    input[i].value = "\\sin"
-                } else if (input[i].value == "cos") {
-                    input[i].value = "\\cos"
-                } else if (input[i].value == "tan") {
-                    input[i].value = "\\tan"
-                } else if (input[i].value == "csc") {
-                    input[i].value = "\\csc"
-                } else if (input[i].value == "sec") {
-                    input[i].value = "\\sec"
-                } else if (input[i].value == "cot") {
-                    input[i].value = "\\cot"
-                } else if (input[i].value == "mean") {
-                    input[i].value = "\\operatorname{mean}"
-                } else if (input[i].value == "meadian") {
-                    input[i].value = "\\operatorname{meadian}"
-                } else if (input[i].value == "quartile") {
-                    input[i].value = "\\operatorname{quartile}"
-                } else if (input[i].value == "shuffle") {
-                    input[i].value = "\\operatorname{shuffle}"
-                } else if (input[i].value == "midpoint") {
-                    input[i].value = "\\operatorname{midpoint}"
-                } else if (input[i].value == "floor") {
-                    input[i].value = "\\operatorname{floor}"
-                } else if (input[i].value == "ceil") {
-                    input[i].value = "\\operatorname{ceil}"
-                } else if (input[i].value == "distance") {
-                    input[i].value = "\\operatorname{distance}"
-                } else if (input[i].value == "count") {
-                    input[i].value = "\\operatorname{count}"
-                } else if (input[i].value == "total") {
-                    input[i].value = "\\operatorname{total}"
-                } else if (input[i].value == "mad") {
-                    input[i].value = "\\operatorname{mad}"
-                } else if (input[i].value == "stats") {
-                    input[i].value = "\\operatorname{stats}"
-                } else if (input[i].value == "estimate") {
-                    input[i].value = "\\operatorname{estimate}"
-                } else if (input[i].value == "dt") {
-                    input[i].value = "\\operatorname{dt}"
-                } else if (input[i].value == "median") {
-                    input[i].value = "\\operatorname{median}"
+        if (i >= 2) {
+            if (input[i - 1].type == "PUNCTUATION" && input[i - 1].value == "." && input[i - 2].type == "KEYWORD" && input[i - 2].value == "Math") {
+                if (input[i].type == "OPERATOR REPLACEMENT") {
+                    if (input[i].value == "random") {
+                        input[i].value = "\\operatorname{random}"
+                    } else if (input[i].value == "round") {
+                        input[i].value = "\\operatorname{round}"
+                    } else if (input[i].value == "sign") {
+                        input[i].value = "\\operatorname{sign}"
+                    } else if (input[i].value == "polygon") {
+                        input[i].value = "\\operatorname{polygon}"
+                    } else if (input[i].value == "max") {
+                        input[i].value = "\\max"
+                    } else if (input[i].value == "min") {
+                        input[i].value = "\\min"
+                    } else if (input[i].value == "mod") {
+                        input[i].value = "\\operatorname{mod}"
+                    } else if (input[i].value == "with") {
+                        input[i].value = "\\operatorname{with}"
+                    } else if (input[i].value == "sin") {
+                        input[i].value = "\\sin"
+                    } else if (input[i].value == "cos") {
+                        input[i].value = "\\cos"
+                    } else if (input[i].value == "tan") {
+                        input[i].value = "\\tan"
+                    } else if (input[i].value == "csc") {
+                        input[i].value = "\\csc"
+                    } else if (input[i].value == "sec") {
+                        input[i].value = "\\sec"
+                    } else if (input[i].value == "cot") {
+                        input[i].value = "\\cot"
+                    } else if (input[i].value == "mean") {
+                        input[i].value = "\\operatorname{mean}"
+                    } else if (input[i].value == "meadian") {
+                        input[i].value = "\\operatorname{meadian}"
+                    } else if (input[i].value == "quartile") {
+                        input[i].value = "\\operatorname{quartile}"
+                    } else if (input[i].value == "shuffle") {
+                        input[i].value = "\\operatorname{shuffle}"
+                    } else if (input[i].value == "midpoint") {
+                        input[i].value = "\\operatorname{midpoint}"
+                    } else if (input[i].value == "floor") {
+                        input[i].value = "\\operatorname{floor}"
+                    } else if (input[i].value == "ceil") {
+                        input[i].value = "\\operatorname{ceil}"
+                    } else if (input[i].value == "distance") {
+                        input[i].value = "\\operatorname{distance}"
+                    } else if (input[i].value == "count") {
+                        input[i].value = "\\operatorname{count}"
+                    } else if (input[i].value == "total") {
+                        input[i].value = "\\operatorname{total}"
+                    } else if (input[i].value == "mad") {
+                        input[i].value = "\\operatorname{mad}"
+                    } else if (input[i].value == "stats") {
+                        input[i].value = "\\operatorname{stats}"
+                    } else if (input[i].value == "estimate") {
+                        input[i].value = "\\operatorname{estimate}"
+                    } else if (input[i].value == "dt") {
+                        input[i].value = "\\operatorname{dt}"
+                    } else if (input[i].value == "median") {
+                        input[i].value = "\\operatorname{median}"
+                    }
+                    input.splice(i - 2,2)
                 }
-                input[i-2] = null
-                input[i-1] = null
             }
-        } else {
-            input[i].type = "IDENTIFIER"
         }
     }
+    console.log(input)
     return input;
 }
 
@@ -1689,28 +1689,28 @@ function tokentoAST(input) {
                 } else {
                     identifer = input[i + 2].value
                 }
-                value = ""
-                for (let e = i + 4; e < input.length; e++) {
-                    if (input[e].value == ";") {
-                        break
-                    } else if (input[e].type == "IDENTIFIER" && input[e].value.length > 1) {
-                        value += input[e].value.slice(0, 1) + "_{" + input[e].value.slice(1) + "}"
+                let value = ""
+                i += 4
+                while (input[i].value != ";")
+                {
+                    if (input[i].type == "IDENTIFIER" && input[i].value.length > 1) {
+                        value += input[i].value.slice(0, 1) + "_{" + input[i].value.slice(1) + "}"
                     } else {
-                        value += input[e].value
+                        value += input[i].value
                     }
+                    i++
                 }
                 data = {
                     type: "VariableDeclarator",
                     varabletype: "NUMBER",
                     identifer: identifer,
-                    valuetype: input[i + 4].type,
+                    valuetype: input[i-1].type,
                     value: value
                 };
                 AST.push(data)
-                i += 4
             }
             if (input[i + 1].value == "array") {
-                values = []
+                let values = []
                 for (e = i + 5; e < input.length; e++) {
                     if (input[e].value == "]") {
                         break
@@ -1758,6 +1758,7 @@ function tokentoAST(input) {
                 AST.push(data)
             }
         }
+        
         // Function stuff
         if (input[i].type == "KEYWORD" && input[i].value == "function") {
             let args = []

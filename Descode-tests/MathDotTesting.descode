@@ -1,6 +1,6 @@
 var number TestNumber = 10;
-var number x = 0;
-var number y = 0;
+var number F = 0;
+var number GO = 0;
 var number z = 0;
 var number a = 0;
 var number b = 0;
@@ -8,8 +8,8 @@ var number c = 0;
 var number random = Math.random();
 
 function TestCosSinTanAndOpp() {
-    x = Math.sin(TestNumber);
-    y = Math.cos(TestNumber);
+    F = Math.sin(TestNumber);
+    GO = Math.cos(TestNumber);
     z = Math.tan(TestNumber);
     a = Math.csc(TestNumber);
     b = Math.sec(TestNumber);
@@ -17,10 +17,10 @@ function TestCosSinTanAndOpp() {
 }
 
 function TestOthers() {
-    x = Math.random();
-    y = Math.round(x);
-    z = Math.mean(x,y);
+    F = Math.random();
+    GO = Math.round(F);
+    z = Math.mean(F,GO);
     a = Math.polygon((0,3),(2,6),(3,3));
     b = Math.distance((0,0),(3,4));
-    c = Math.floor(x);
+    c = Math.floor(F);
 }
