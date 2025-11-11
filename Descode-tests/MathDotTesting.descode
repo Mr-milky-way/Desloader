@@ -1,26 +1,31 @@
-var TestNumber = 10;
-var F = 0;
-var GO = 0;
-var z = 0;
-var a = 0;
-var b = 0;
-var c = 0;
-var random = Math.random();
+folder TestMathDotTestingVariables {
 
-function TestCosSinTanAndOpp() {
-    F = Math.sin(TestNumber);
-    GO = Math.cos(TestNumber);
-    z = Math.tan(TestNumber);
-    a = Math.csc(TestNumber);
-    b = Math.sec(TestNumber);
-    c = Math.cot(TestNumber);
+    var TestNumber = 10;
+    var F = 0;
+    var GO = 0;
+    var z = 0;
+    var a = 0;
+    var b = 0;
+    var c = 0;
+    var random = Math.random();
 }
 
-function TestOthers() {
-    F = Math.random();
-    GO = Math.round(F);
-    z = Math.mean(F,GO);
-    a = Math.polygon((0,3),(2,6),(3,3));
-    b = Math.distance((0,0),(3,4));
-    c = Math.floor(F);
+folder functions {
+    function TestCosSinTanAndOpp() {
+        F = Math.sin(TestNumber);
+        GO = Math.cos(TestNumber);
+        z = Math.tan(TestNumber);
+        a = Math.csc(TestNumber);
+        b = Math.sec(TestNumber);
+        c = Math.cot(TestNumber);
+    }
+
+    function TestOthers() {
+        F = Math.random();
+        GO = Math.round(F);
+        z = Math.mean(F,GO);
+        a = Math.polygon((0,3),(2,6),(3,3));
+        b = Math.distance((0,0),(3,4));
+        c = Math.floor(F);
+    }
 }

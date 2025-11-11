@@ -1553,8 +1553,7 @@ document.getElementById("loadOBJtale").addEventListener("change", e => {
 
 
 //TODO: Add error handling for invalid Desmos code
-//TODO: Add support for folders
-//TODO: Add support for full "game uploads" IE multiple files 3d models textures etc
+//TODO: Add support for full "game uploads" IE multiple files 3d models textures ect (for 2d desmos only)
 
 
 
@@ -1592,7 +1591,7 @@ function tokenizer(input) {
             type = "OPERATOR";
         } else if (["(", ")", "{", "}", ";", "[", "]", ",", "."].includes(value)) {
             type = "PUNCTUATION";
-        } else if (["if", "var", "function", "else", "ticker", "Math"].includes(value)) {
+        } else if (["if", "var", "function", "else", "ticker", "Math", "folder"].includes(value)) {
             type = "KEYWORD";
         } else if (["random", "round", "sign", "polygon", "max", "min", "mod", "with", "sin", "cos", "tan", "csc", "sec", "cot", "mean", "meadian", "quartile", "shuffle", "midpoint", "floor", "ceil", "distance", "count", "total", "mad", "stats", "estimate", "dt", "median"].includes(value)) {
             type = "OPERATOR REPLACEMENT";
@@ -1690,66 +1689,15 @@ function tokentoAST(input) {
     for (let i = 0; i < input.length; i++) {
         // Variable stuff
         if (input[i].type == "KEYWORD" && input[i].value == "var") {
-            if (input[i + 1].value.length > 1) {
-                identifer = input[i + 1].value.slice(0, 1) + "_{" + input[i + 1].value.slice(1) + "}"
-            } else {
-                identifer = input[i + 1].value
-            }
-            let value = ""
-            i += 3
-            while (input[i].value != ";") {
-                if (input[i].type == "IDENTIFIER" && input[i].value.length > 1) {
-                    value += input[i].value.slice(0, 1) + "_{" + input[i].value.slice(1) + "}"
-                } else {
-                    value += input[i].value
-                }
-                i++
-            }
-            data = {
-                type: "VariableDeclarator",
-                identifer: identifer,
-                value: value
-            };
-            AST.push(data)
+            i = CreateVariable(AST, input, i)
         }
-
         // Function stuff
         if (input[i].type == "KEYWORD" && input[i].value == "function") {
-            let args = []
-            data = {
-                type: "FunctionDeclaration",
-                FuncName: input[i + 1].value,
-                arguments: "",
-                body: []
-            };
-            i += 3
-            while (input[i].value != ")") {
-                if (input[i].value !== ",") {
-                    if (input[i].value.length > 1) {
-                        arg = input[i].value.slice(0, 1) + "_{" + input[i].value.slice(1) + "}"
-                    } else {
-                        arg = input[i].value
-                    }
-                    args.push(arg)
-                }
-                i++;
-            }
-            data.arguments = args
-            while (input[i].value != "}") {
-                if (input[i].type == "IDENTIFIER" && input[i + 1].value == "=") {
-                    AssignmentExpression(data, input, i)
-                } else if (input[i].type == "IDENTIFIER" && input[i + 1].value == "(") {
-                    CallExpression(data, input, i)
-                } else if (input[i].type == "KEYWORD" && input[i].value == "if") {
-                    i = IfStatement(data, input, i)
-                } else if (input[i].type == "KEYWORD" && input[i].value == "else" && input[i + 1].value == "if") {
-                    i = ElseIfStatement(data, input, i)
-                } else if (input[i].type == "KEYWORD" && input[i].value == "else" && input[i + 1].value !== "if") {
-                    i = ElseStatement(data, input, i)
-                }
-                i++
-            }
-            AST.push(data)
+            i = CreateFunction(AST, input, i)
+        }
+        // Folder stuff
+        if (input[i].type == "KEYWORD" && input[i].value == "folder") {
+            i = CreateFolder(AST, input, i)
         }
         // TICKER STUFF--------------------------------------------------------------------------------
         if (input[i].type == "KEYWORD" && input[i].value == "ticker") {
@@ -1799,6 +1747,112 @@ function tokentoAST(input) {
     URL.revokeObjectURL(a.href);
     */
     return AST
+}
+
+function CreateFolder(FuncJson, input, i) {
+    let data = {
+        type: "FolderDeclaration",
+        FolderName: input[i + 1].value,
+        body: []
+    };
+    i += 2
+    while (input[i].value != "}") {
+        if (input[i].type == "KEYWORD" && input[i].value == "var") {
+            i = CreateVariable(data, input, i)
+        } else if (input[i].type == "KEYWORD" && input[i].value == "function") {
+            i = CreateFunction(data, input, i)
+        } else if (input[i].type == "IDENTIFIER" && input[i + 1].value == "=") {
+            AssignmentExpression(data, input, i)
+        } else if (input[i].type == "IDENTIFIER" && input[i + 1].value == "(") {
+            CallExpression(data, input, i)
+        } else if (input[i].type == "KEYWORD" && input[i].value == "if") {
+            i = IfStatement(data, input, i)
+        } else if (input[i].type == "KEYWORD" && input[i].value == "else" && input[i + 1].value == "if") {
+            i = ElseIfStatement(data, input, i)
+        } else if (input[i].type == "KEYWORD" && input[i].value == "else" && input[i + 1].value !== "if") {
+            i = ElseStatement(data, input, i)
+        }
+        i++
+    }
+    if (FuncJson.body === undefined) {
+        FuncJson.Expression.body.push(data)
+    } else {
+        FuncJson.body.push(data)
+    }
+    return i
+}
+
+function CreateFunction(FuncJson, input, i) {
+    let args = []
+    let data = {
+        type: "FunctionDeclaration",
+        FuncName: input[i + 1].value,
+        arguments: "",
+        body: []
+    };
+    i += 3
+    while (input[i].value != ")") {
+        if (input[i].value !== ",") {
+            if (input[i].value.length > 1) {
+                arg = input[i].value.slice(0, 1) + "_{" + input[i].value.slice(1) + "}"
+            } else {
+                arg = input[i].value
+            }
+            args.push(arg)
+        }
+        i++;
+    }
+    data.arguments = args
+    while (input[i].value != "}") {
+        if (input[i].type == "IDENTIFIER" && input[i + 1].value == "=") {
+            AssignmentExpression(data, input, i)
+        } else if (input[i].type == "IDENTIFIER" && input[i + 1].value == "(") {
+            CallExpression(data, input, i)
+        } else if (input[i].type == "KEYWORD" && input[i].value == "if") {
+            i = IfStatement(data, input, i)
+        } else if (input[i].type == "KEYWORD" && input[i].value == "else" && input[i + 1].value == "if") {
+            i = ElseIfStatement(data, input, i)
+        } else if (input[i].type == "KEYWORD" && input[i].value == "else" && input[i + 1].value !== "if") {
+            i = ElseStatement(data, input, i)
+        }
+        i++
+    }
+    if (FuncJson.body === undefined) {
+        FuncJson.Expression.body.push(data)
+    } else {
+        FuncJson.body.push(data)
+    }
+    return i
+}
+
+function CreateVariable(FuncJson, input, i) {
+    if (input[i + 1].value.length > 1) {
+        identifer = input[i + 1].value.slice(0, 1) + "_{" + input[i + 1].value.slice(1) + "}"
+    } else {
+        identifer = input[i + 1].value
+    }
+    let value = ""
+    i += 3
+    while (input[i].value != ";") {
+        if (input[i].type == "IDENTIFIER" && input[i].value.length > 1) {
+            value += input[i].value.slice(0, 1) + "_{" + input[i].value.slice(1) + "}"
+        } else {
+            value += input[i].value
+        }
+        i++
+    }
+    let data = {
+        type: "VariableDeclarator",
+        identifer: identifer,
+        value: value
+    };
+
+    if (FuncJson.body === undefined) {
+        FuncJson.Expression.body.push(data)
+    } else {
+        FuncJson.body.push(data)
+    }
+    return i
 }
 
 function AssignmentExpression(FuncJson, input, number) {
@@ -1938,7 +1992,7 @@ function ElseIfStatement(FuncJson, input, number) {
             body: []
         }
     }
-    while (input[W].value != "}") { 
+    while (input[W].value != "}") {
         if (input[W].type == "IDENTIFIER" && input[W + 1].value == "=") {
             AssignmentExpression(dato, input, W)
         } else if (input[W].type == "IDENTIFIER" && input[W + 1].value == "(") {
@@ -1971,7 +2025,7 @@ function ElseStatement(FuncJson, input, number) {
         }
     }
     let A = number + 1
-    while (input[A].value != "}") { 
+    while (input[A].value != "}") {
         if (input[A].type == "IDENTIFIER" && input[A + 1].value == "=") {
             AssignmentExpression(dato, input, A)
         } else if (input[A].type == "IDENTIFIER" && input[A + 1].value == "(") {
@@ -1997,6 +2051,28 @@ function ElseStatement(FuncJson, input, number) {
 function ASTToDesmos(AST, calcstate) {
     for (let i = 0; i < AST.length; i++) {
         // Variable stuff
+        if (AST[i].type == "FolderDeclaration") {
+            let folderId = getRandomInt(1, 10000);
+            state.expressions.list.push({
+                type: "folder",
+                id: folderId.toString(),
+                title: AST[i].FolderName,
+                collapsed: true
+            })
+            for (let e = 0; e < AST[i].body.length; e++) {
+                if (AST[i].body[e].type == "VariableDeclarator") {
+                    calcstate.expressions.list.push({
+                        type: "expression",
+                        folderId: folderId.toString(),
+                        id: 1,
+                        latex: AST[i].identifer + "=" + AST[i].value
+                    });
+                }
+                if (AST[i].body[e].type == "FunctionDeclaration") {
+                    FunctionASTToDes(AST[i].body[e], folderId)
+                }
+            }
+        }
         if (AST[i].type == "VariableDeclarator") {
             calcstate.expressions.list.push({
                 type: "expression",
@@ -2006,34 +2082,7 @@ function ASTToDesmos(AST, calcstate) {
         }
         // Function stuff
         if (AST[i].type == "FunctionDeclaration") {
-            if (AST[i].FuncName.length > 1) {
-                FunctionName = AST[i].FuncName.slice(0, 1) + "_{" + AST[i].FuncName.slice(1) + "}"
-            } else {
-                FunctionName = AST[i].FuncName
-            }
-            let body = ""
-            for (let e = 0; e < AST[i].body.length; e++) {
-                if (AST[i].body[e].Expression.type == "AssignmentExpression") {
-                    body += AssignmentExpressionASTToDes(AST[i].body[e].Expression.identifier, AST[i].body[e].Expression.body[0].length, AST[i].body[e].Expression.body, e)
-                }
-                if (AST[i].body[e].Expression.type == "CallExpression") {
-                    body += CallExpressionASTToDes(AST[i].body[e].Expression.identifier, AST[i].body[e].Expression.args, e)
-                }
-                if (AST[i].body[e].Expression.type == "IfStatement" && AST[i].body[e].type == "IfStatement") {
-                    body += IfStatementASTtoDes(AST[i].body[e].Expression.body, AST[i].body, e)
-                }
-                if (AST[i].body[e].Expression.type == "IfStatement" && AST[i].body[e].type == "ElseIfStatement") {
-                    body += ElseIfStatementASTToDes(AST[i].body[e].Expression.body, AST[i].body, e)
-                }
-                if (AST[i].body[e].Expression.type == "IfStatement" && AST[i].body[e].type == "ElseStatement") {
-                    body += ElseStatementASTToDes(AST[i].body[e].Expression.body, AST[i].body, e)
-                }
-            }
-            calcstate.expressions.list.push({
-                type: "expression",
-                id: 1,
-                latex: FunctionName + "(" + AST[i].arguments + ")" + "=" + body
-            });
+            FunctionASTToDes(AST[i], null)
         }
         // TICKER STUFF--------------------------------------------------------------------------------
         if (AST[i].type == "Ticker") {
@@ -2066,6 +2115,46 @@ function ASTToDesmos(AST, calcstate) {
 }
 
 
+
+function FunctionASTToDes(data, folderID) {
+    if (data.FuncName.length > 1) {
+        FunctionName = data.FuncName.slice(0, 1) + "_{" + data.FuncName.slice(1) + "}"
+    } else {
+        FunctionName = data.FuncName
+    }
+    let body = ""
+    for (let e = 0; e < data.body.length; e++) {
+        if (data.body[e].Expression.type == "AssignmentExpression") {
+            body += AssignmentExpressionASTToDes(data.body[e].Expression.identifier, data.body[e].Expression.body[0].length, data.body[e].Expression.body, e)
+        }
+        if (data.body[e].Expression.type == "CallExpression") {
+            body += CallExpressionASTToDes(data.body[e].Expression.identifier, data.body[e].Expression.args, e)
+        }
+        if (data.body[e].Expression.type == "IfStatement" && data.body[e].type == "IfStatement") {
+            body += IfStatementASTtoDes(data.body[e].Expression.body, data.body, e)
+        }
+        if (data.body[e].Expression.type == "IfStatement" && data.body[e].type == "ElseIfStatement") {
+            body += ElseIfStatementASTToDes(data.body[e].Expression.body, data.body, e)
+        }
+        if (data.body[e].Expression.type == "IfStatement" && data.body[e].type == "ElseStatement") {
+            body += ElseStatementASTToDes(data.body[e].Expression.body, data.body, e)
+        }
+    }
+    if (folderID == null) {
+        calcstate.expressions.list.push({
+            type: "expression",
+            id: 1,
+            latex: FunctionName + "(" + data.arguments + ")" + "=" + body
+        });
+    } else {
+        calcstate.expressions.list.push({
+            type: "expression",
+            folderId: folderID.toString(),
+            id: 1,
+            latex: FunctionName + "(" + data.arguments + ")" + "=" + body
+        });
+    }
+}
 
 function CallExpressionASTToDes(identifier, args, e) {
     body = ""
