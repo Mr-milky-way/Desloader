@@ -1,5 +1,4 @@
 folder TestMathDotTestingVariables {
-
     var TestNumber = 10;
     var F = 0;
     var GO = 0;

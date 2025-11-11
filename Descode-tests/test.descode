@@ -1,80 +1,83 @@
-var DeltaTime = 0;
-var Timer = 0;
+folder Variables {
 
-var Error = 0;
-var Derivative = 0;
-var PastError = 0;
-var Integral = 0;
+    var DeltaTime = 0;
+    var Timer = 0;
 
-var P = 0;
-var I = 0;
-var D = 0;
+    var Error = 0;
+    var Derivative = 0;
+    var PastError = 0;
 
-var Speed = 0;
-var AccelRate = 1.01;
+    var P = 0.1;
+    var D = 0.1;
 
-var GroundResetPoint = 0;
+    var Speed = 0.07;
+    var AccelRate = 1.0;
 
-var MaxMovement = 3;
+    var GroundResetPoint = -5;
 
-var InputRight = (4,-4);
-var InputLeft = (-4,-4);
+    var MaxMovement = 3;
 
-var GroundPos = (0,0,0)
-var GroundPosA = [(GroundPos.x,GroundPos.y,GroundPos.z)];
+    var InputRight = (4,-4);
+    var InputLeft = (-4,-4);
 
-var Roadblocks = [(0,0,100),(0,0,100)];
+    var GroundPos = (0,0,0);
+    var GroundPosA = [(GroundPos.x,GroundPos.y,GroundPos.z)];
 
-var CarPos = (0,0,0);
-var TargetCarPos = (0,0,0);
+    var Roadblocks = [(0,0,100),(0,0,100)];
 
-function Update() {
-    Timer = Timer+DeltaTime;
-    UpdateCarPos()
-    moveGround()
-    GetInput(0)
-    SpeedUp()
-    RoadBlocks()
+    var CarPos = (0,0,0);
+    var TargetCarPos = (0,0,0);
 }
 
-function UpdateCarPos() {
-    PastError = Error;
-    Error = TargetCarPos.x-CarPos.x;
-    Integral = Integral + Error * DeltaTime/1000;
-    Derivative = (Error - PastError)/DeltaTime/1000;
-    CarPos = (CarPos.x+(Error*P) + (Integral*I) + (Derivative*D),0,0);
-}
+folder functions {
 
-function moveGround() {
-    if (GroundPos.y <= GroundResetPoint) {
-        GroundPos = (0,-GroundResetPoint,0);
-    } else {
-        GroundPos = (0,GroundPos.y-1*Speed,0);
+    function Update() {
+        Timer = Timer+DeltaTime;
+        UpdateCarPos()
+        moveGround()
+        GetInput(0)
+        SpeedUp()
+        RoadBlocks()
     }
-}
 
-function GetInput(input) {
-    if (TargetCarPos.x >= MaxMovement) {
-        TargetCarPos = (MaxMovement-1,0,0);
-    } else if (TargetCarPos.x <= -MaxMovement) {
-        TargetCarPos = (-MaxMovement+1,0,0);
-    } else {
-        TargetCarPos = (TargetCarPos.x+input,0,0);
+    function UpdateCarPos() {
+        PastError = Error;
+        Error = TargetCarPos.x-CarPos.x;
+        Derivative = (Error - PastError)/DeltaTime/1000;
+        CarPos = (CarPos.x+(Error*P) + (Derivative*D),0,0);
     }
-}
 
-function RoadBlocks() {
-    if (GroundPos.y <= GroundResetPoint) {
-        Roadblocks = (Math.round(Math.random(2)*6)-3,GroundPos.y+2,1);
-    } else {
-        Roadblocks = (Roadblocks.x,GroundPos.y,Roadblocks.z);
+    function moveGround() {
+        if (GroundPos.y <= GroundResetPoint) {
+            GroundPos = (0,-GroundResetPoint,0);
+        } else {
+            GroundPos = (0,GroundPos.y-1*Speed,0);
+        }
     }
-}
 
-function SpeedUp() {
-    Speed = Speed * AccelRate;
-}
+    function GetInput(input) {
+        if (TargetCarPos.x >= MaxMovement) {
+            TargetCarPos = (MaxMovement-1,0,0);
+        } else if (TargetCarPos.x <= -MaxMovement) {
+            TargetCarPos = (-MaxMovement+1,0,0);
+        } else {
+            TargetCarPos = (TargetCarPos.x+input,0,0);
+        }
+    }
 
+    function RoadBlocks() {
+        if (GroundPos.y <= GroundResetPoint) {
+            Roadblocks = (Math.round(Math.random(2)*6)-3,GroundPos.y+2,1);
+        } else {
+            Roadblocks = (Roadblocks.x,GroundPos.y,Roadblocks.z);
+        }
+    }
+
+    function SpeedUp() {
+        Speed = Speed * AccelRate;
+    }
+
+}
 
 ticker(0) {
     Update()
