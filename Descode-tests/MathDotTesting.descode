@@ -1,11 +1,11 @@
-var number TestNumber = 10;
-var number F = 0;
-var number GO = 0;
-var number z = 0;
-var number a = 0;
-var number b = 0;
-var number c = 0;
-var number random = Math.random();
+var TestNumber = 10;
+var F = 0;
+var GO = 0;
+var z = 0;
+var a = 0;
+var b = 0;
+var c = 0;
+var random = Math.random();
 
 function TestCosSinTanAndOpp() {
     F = Math.sin(TestNumber);

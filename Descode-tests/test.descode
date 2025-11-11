@@ -1,32 +1,32 @@
-var number DeltaTime = 0;
-var number Timer = 0;
+var DeltaTime = 0;
+var Timer = 0;
 
-var number Error = 0;
-var number Derivative = 0;
-var number PastError = 0;
-var number Integral = 0;
+var Error = 0;
+var Derivative = 0;
+var PastError = 0;
+var Integral = 0;
 
-var number P = 0;
-var number I = 0;
-var number D = 0;
+var P = 0;
+var I = 0;
+var D = 0;
 
-var number Speed = 0;
-var number AccelRate = 1.01;
+var Speed = 0;
+var AccelRate = 1.01;
 
-var number GroundResetPoint = 0;
+var GroundResetPoint = 0;
 
-var number MaxMovement = 3;
+var MaxMovement = 3;
 
-var vector InputRight = (4,-4);
-var vector InputLeft = (-4,-4);
+var InputRight = (4,-4);
+var InputLeft = (-4,-4);
 
-var vector GroundPos = (0,0,0)
-var array GroundPosA = [(GroundPos.x,GroundPos.y,GroundPos.z)];
+var GroundPos = (0,0,0)
+var GroundPosA = [(GroundPos.x,GroundPos.y,GroundPos.z)];
 
-var array Roadblocks = [(0,0,100),(0,0,100)];
+var Roadblocks = [(0,0,100),(0,0,100)];
 
-var vector CarPos = (0,0,0);
-var vector TargetCarPos = (0,0,0);
+var CarPos = (0,0,0);
+var TargetCarPos = (0,0,0);
 
 function Update() {
     Timer = Timer+DeltaTime;
