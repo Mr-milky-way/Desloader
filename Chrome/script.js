@@ -126,7 +126,7 @@ function run() {
                     <h4><button class="button1" onclick="To3d();">Go to 3D</button></h4>
                     <h4><button class="button1" onclick="AddTicker();">Add starter ticker</button></h4>
                     <h4>Load OBJ into table<input class="file1" type="file" id="loadOBJtale" accept=".obj" /></h4>
-                    <h4>Import DesCode<input class="file1" type="file" id="loadDesCode" accept=".DesCode" /></h4>
+                    <h4>Import DesCode<input class="file1" type="file" id="loadDesCode" accept=".DesCode,.obj,.png" multiple/></h4>
                     <h5>Clear Graph when uploading code? <input type="checkbox" id="CodeClearCheckBox"></h5>
                 </div>
             </div>
