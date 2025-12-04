@@ -75,15 +75,24 @@ var number z = position.z;
 You can't access array elements as of version 0.1.3.
 
 # Notes
-- Descode is case sensitive. Variable and function names must be used consistently with the same capitalization
-- White space (spaces, tabs, new lines) is ignored in descode. You can format your code for readability as you like.
-- Descode does not support advanced features like loops, classes, or error handling as of version 0.1.3.
+- When declaring variables you must start with `var` followed by the type of variable you want to declare (number, array, vector).
+- You can only nest if statments into if and if else if statments.
 - Every thing in a function runs/changes at the same time meaning if you change a variable in the start of a function and then use that same variable later in the function it will use the previously value. 
+- The time on tickers is in milliseconds and can be changed my changing the X value in `ticker(X) { }`.
+- Descode is case sensitive meaning `Function` and `function` are two different things.
+- When setting a variable that is a number or changeing any variable in a function you need to end the line with a semicolon `;`
+- Arrays work with numbers and vectors.
+- You can input varable names into vectors.
+- You can only have one ticker per descode file.
 - Functions don't need to be declared or called in any specific order. They will work no matter where they are in the file.
-- Only one ticker is allowed per descode file.
+- There is no commenting system in descode at the moment.
 - You should not name variables the same thing as functions, use spaces or special characters in variable names.
 - Descode will not tell you if there is an error in your code, so make sure to double check everything if something is not working.
-- Descode is still in early development, and new features may be added in future versions.
+- This documentation may sometimes be out of date with the most recent version of Descode. 
+- If something is not working as expected and you think it should please open an issue on the GitHub repo.
+- Feel free to suggest new features or changes to Descode by opening an issue on the GitHub repo.
+- Descode is still in early development and may have bugs or missing features.
+- You may need to make additional changes to the desmos graph to get the descode to work as intended IE: In the ticker it might add the variable `dt` as `d_{t}` in desmos so you would need to change that manually to `dt`.
 
 
 # Examples
@@ -200,7 +209,7 @@ ticker(0) {
 }
 ```
 
-More tests and examples can be found in the GitHub repository under the `descode-tests` folder.
+More tests and examples can be found [here](/Descode-tests)
 
 
 
