@@ -1560,30 +1560,82 @@ document.getElementById("loadOBJtale").addEventListener("change", e => {
 document.getElementById("loadDesCode").addEventListener("change", e => {
     let filenames = []
     let MainFile = null
-    for (let i = 0; i < e.target.files.length; i++) {
-        filenames[i] = e.target.files[i].name
-        if (e.target.files[i].name.endsWith('.descode') && MainFile == null) {
-            MainFile = i
+    try {
+        for (let i = 0; i < e.target.files.length; i++) {
+            filenames[i] = {
+                filename: e.target.files[i].name.split(".")[0],
+                Found: false
+            }
+            if (e.target.files[i].name.endsWith('.descode') && MainFile == null) {
+                MainFile = i
+                filenames[i].Found = true
+            }
         }
+        if (MainFile == null) {
+            throw new Error("No descode provided")
+        }
+    } catch (Error) {
+        alert(Error)
+        e.target.value = "";
+        return;
     }
+    console.log(filenames)
     const Code = e.target.files[MainFile];
     const reader = new FileReader();
 
-    reader.onload = (Code) => {
+    reader.onload = async (Code) => {
         if (CodeClearCheckBox.checked) {
             Calc.setBlank();
         }
-        let state = Calc.getState();
-        let text = Code.target.result;
-        let tokens = tokenizer(text);
-        OtherImports = FindImports(tokens);
-        let processedTokens = tokenProcessor(tokens);
-        let AST = tokentoAST(processedTokens)
-        ASTToDesmos(AST, state)
-        e.target.value = "";
+        try {
+            let state = await Calc.getState();
+            let text = await Code.target.result;
+            let tokens = await tokenizer(text);
+            OtherImports = await FindImports(tokens);
+            let processedTokens = await tokenProcessor(tokens);
+            let AST = await tokentoAST(processedTokens)
+            ASTToDesmos(AST, state)
+        } catch (Error) {
+            e.target.value = "";
+            return;
+        }
+        if (OtherImports.length >= 1) {
+            try {
+                for (let i = 0; i < OtherImports.length; i++) {
+                    for (let e = 0; e < filenames.length; e++) {
+                        if (filenames[e].filename == OtherImports[i].filename) {
+                            filenames[e].Found = true;
+                            OtherImports[i].Found = true;
+                            OtherImports[i].FoundAt = e;
+                        }
+                    }
+                }
+                for (let i = 0; i < OtherImports.length; i++) {
+                    if (!OtherImports[i].Found) {
+                        throw new Error("File not found: " + OtherImports[i].filename + OtherImports[i].fileType)
+                    }
+                }
+            } catch (Error) {
+                alert(Error)
+                e.target.value = "";
+                return;
+            }
+            let TempUVs = null
+            for (let i = 0; i < OtherImports.length; i++) {
+                if (OtherImports[i].fileType == ".obj") {
+                    let state = Calc.getState();
+                    TempUVs = await CreateOBJStuff(e.target.files[OtherImports[i].FoundAt], OtherImports[i].pointName, OtherImports[i].FaceName, state, OtherImports[i].filename)
+                }
+                if (OtherImports[i].fileType == ".png") {
+                    let state = Calc.getState();
+                    CreateHSVColorData(e.target.files[OtherImports[i].FoundAt], TempUVs, state, OtherImports[i].filename, OtherImports[i].ColorName)
+                }
+            }
+        } else {
+            e.target.value = "";
+        }
     }
     reader.readAsText(Code);
-
 });
 
 function tokenizer(input) {
@@ -1626,13 +1678,23 @@ function FindImports(input) {
                     filename: input[i + 1].value,
                     pointName: input[i + 2].value,
                     FaceName: input[i + 3].value,
-                    ColorName: input[i + 4].value,
-                    UVImageName: input[i + 5].value
+                    Found: false,
+                    FoundAt: null,
+                    fileType: ".obj"
+                }
+                let Importdata2 = {
+                    fileType: ".png",
+                    Found: false,
+                    FoundAt: null,
+                    filename: input[i + 5].value,
+                    ColorName: input[i + 4].value
                 }
                 data.push(Importdata)
+                data.push(Importdata2)
             }
         }
     }
+    console.log(data)
     return data
 }
 
@@ -1861,7 +1923,7 @@ function CreateFunction(FuncJson, input, i) {
             i = ElseIfStatement(data, input, i)
         } else if (input[i].type == "KEYWORD" && input[i].value == "else" && input[i + 1].value !== "if") {
             i = ElseStatement(data, input, i)
-        } else if (input[i].type == "KEYWORD" && input[W].value == "return") {
+        } else if (input[i].type == "KEYWORD" && input[i].value == "return") {
             i = FuncExpression(data, input, i)
         }
         i++
@@ -2381,8 +2443,168 @@ function FuncExpressionASTToDes(ExpressionBody) {
     for (let W = 0; W < ExpressionBody[0].length; W++) {
         body += ExpressionBody[0][W]
     }
-    console.log(body)
     return body
+}
+
+
+
+function CreateOBJStuff(OBJFile, PointName, FaceName, state, FileName) {
+    return new Promise((resolve, reject) => {
+        if (PointName.length > 1) {
+            PointName = PointName.slice(0, 1) + "_{" + PointName.slice(1) + "}"
+        }
+        if (FaceName.length > 1) {
+            FaceName = FaceName.slice(0, 1) + "_{" + FaceName.slice(1) + "}"
+        }
+        const reader = new FileReader();
+        reader.onload = (OBJFile) => {
+            const text = OBJFile.target.result;
+            const lines = text.split('\n');
+            const Vertexes = lines.filter(line => line.startsWith('v '));
+            const UVs = lines.filter(line => line.startsWith('vt '));
+            let UVS = []
+            const Faces = lines.filter(line => line.startsWith('f'));
+            let Output = []
+            for (let i = 0; i < Vertexes.length; i++) {
+                Vlines = []
+                UVLine = Vertexes[i].substr(2)
+                UVLine = UVLine.split(' ');
+                Vlines.push("(" + UVLine[0], UVLine[1], UVLine[2] + ")")
+                Vertexes[i] = Vlines
+            }
+            for (let i = 0; i < UVs.length; i++) {
+                Vlines = []
+                UVLine = UVs[i].substr(3)
+                UVLine = UVLine.split(' ');
+                Vlines.push(UVLine[0], 1 - UVLine[1])
+                UVs[i] = Vlines
+            }
+            for (let i = 0; Faces.length > i; i++) {
+                Fnlines = []
+                Flines = []
+                Fline = Faces[i].substr(2)
+                Fline = Fline.split(' ');
+                Fline1 = Fline[0].split('/');
+                Fline2 = Fline[1].split('/');
+                Fline3 = Fline[2].split('/');
+                Flines.push("(" + parseInt(Fline1[0]) + "," + parseInt(Fline2[0]) + "," + parseInt(Fline3[0]) + ")")
+                Fnlines.push(UVs[parseInt(Fline1[1]) - 1].map(Number), UVs[parseInt(Fline2[1]) - 1].map(Number), UVs[parseInt(Fline3[1]) - 1].map(Number))
+                Faces[i] = Flines
+                UVS[i] = Fnlines
+            }
+            Output[0] = Faces.join()
+            Output[1] = Vertexes.join()
+            let folder1Id = getRandomInt(1, 10000);
+            state.expressions.list.push({
+                type: "folder",
+                id: folder1Id.toString(),
+                title: FileName,
+                collapsed: true
+            });
+            state.expressions.list.push({
+                type: "expression",
+                id: getRandomInt(1, 10000).toString(),
+                folderId: folder1Id.toString(),
+                color: "#c74440",
+                latex: FaceName + "=[" + Output[0] + "]",
+                hidden: true
+            });
+            state.expressions.list.push({
+                type: "expression",
+                id: getRandomInt(1, 10000).toString(),
+                folderId: folder1Id.toString(),
+                color: "#c74440",
+                latex: PointName + "=[" + Output[1] + "]",
+                hidden: true
+            });
+            Calc.setState(state)
+            resolve(UVS);
+        };
+        reader.onerror = (e) => reject(e);
+        reader.readAsText(OBJFile);
+    });
+}
+
+function rgb2hsv(r, g, b) {
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    let max = Math.max(r, g, b);
+    let min = Math.min(r, g, b);
+    let h, s, v = max;
+
+    let diff = max - min;
+    s = max === 0 ? 0 : diff / max;
+
+    if (max === min) {
+        h = 0; // achromatic
+    } else {
+        switch (max) {
+            case r:
+                h = (g - b) / diff + (g < b ? 6 : 0);
+                break;
+            case g:
+                h = (b - r) / diff + 2;
+                break;
+            case b:
+                h = (r - g) / diff + 4;
+                break;
+        }
+        h /= 6;
+    }
+    return "(" + Math.round(h * 360) + "," + Math.round(s * 100) + "," + Math.round(v * 100) + ")";
+}
+
+async function CreateHSVColorData(File, UVs, state, FileName, ColorName) {
+    if (ColorName.length > 1) {
+        ColorName = ColorName.slice(0, 1) + "_{" + ColorName.slice(1) + "}"
+    }
+    rbgValues = []
+    const img = new Image();
+    img.onload = async function () {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        Output = null;
+        for (let i = 0; i < UVs.length; i++) {
+            const triangle = UVs[i];
+            const avgColor = await getAverageColorOfTriangle(ctx, triangle, img.width, img.height) + "";
+            rbgValues[i] = avgColor
+        }
+        R = []
+        G = []
+        B = []
+        for (let i = 0; i < rbgValues.length; i++) {
+            R[i] = rbgValues[i].split(',')[0];
+            G[i] = rbgValues[i].split(',')[1];
+            B[i] = rbgValues[i].split(',')[2];
+        }
+        for (let i = 0; i < rbgValues.length; i++) {
+            rbgValues[i] = rgb2hsv(R[i], G[i], B[i])
+        }
+        console.log(rbgValues)
+        let folderId = getRandomInt(1, 10000);
+        state.expressions.list.push({
+            type: "folder",
+            id: folderId.toString(),
+            title: "Color Data of " + FileName,
+            collapsed: true
+        });
+        state.expressions.list.push({
+            type: "expression",
+            id: getRandomInt(1, 10000).toString(),
+            folderId: folderId.toString(),
+            color: "#c74440",
+            latex: ColorName + "=[" + rbgValues + "]",
+            hidden: true
+        });
+        Calc.setState(state)
+    }
+    img.src = URL.createObjectURL(File);
 }
 
 

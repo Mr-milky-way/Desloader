@@ -197,7 +197,7 @@ ticker(0) {
 - Every thing in a function runs/changes at the same time meaning if you change a variable in the start of a function and then use that same variable later in the function it will use the previously value. 
 - The time on tickers is in milliseconds and can be changed my changing the X value in `ticker(X) { }`.
 - Descode is case sensitive meaning `Function` and `function` are two different things.
-- When setting a variable that is a number or changeing any variable in a function you need to end the line with a semicolon `;`
+- When setting a variable that is a number or changing any variable in a function you need to end the line with a semicolon `;`
 - Arrays work with numbers and vectors.
 - You can input varable names into vectors.
 - You can only have one ticker per descode file.
