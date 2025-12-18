@@ -1801,8 +1801,14 @@ function tokentoAST(input) {
     const AST = []
     for (let i = 0; i < input.length; i++) {
         // Variable stuff
+        alert(input[i].value)
         if (input[i].type == "KEYWORD" && input[i].value == "var") {
             i = CreateVariable(AST, input, i)
+        }
+
+        if (input[i].value == "/" && input[i+1].value == "*") {
+            alert("Called")
+            i = CreateComment(AST, input, i)
         }
         // Function stuff
         if (input[i].type == "KEYWORD" && input[i].value == "function") {
@@ -1823,7 +1829,7 @@ function tokentoAST(input) {
             i += 2
             while (input[i].value != ")") {
                 if (input[i].value !== ",") {
-                    if (input[i].value.length > 1 && input[i].type !== "NUMBER") {
+                    if (input[i].value.length > 1 && input[i].type == "IDENTIFIER") {
                         arg = input[i].value.slice(0, 1) + "_{" + input[i].value.slice(1) + "}"
                     } else {
                         arg = input[i].value
@@ -1862,6 +1868,26 @@ function tokentoAST(input) {
     return AST
 }
 
+function CreateComment(FuncJson, input, i) {
+    let text = []
+    let data = {
+        type: "Comment",
+        CommentText: null,
+    };
+    i = i + 2
+    while (input[i].value != "*" && input[i + 1].value != "/") {
+        text += input[i].value + " ";
+        i++;
+    }
+    data.CommentText = text
+    if (FuncJson.body === undefined) {
+        FuncJson.push(data)
+    } else {
+        FuncJson.body.push(data)
+    }
+    return i
+}
+
 function CreateFolder(FuncJson, input, i) {
     let data = {
         type: "FolderDeclaration",
@@ -1870,7 +1896,9 @@ function CreateFolder(FuncJson, input, i) {
     };
     i += 2
     while (input[i].value != "}") {
-        if (input[i].type == "KEYWORD" && input[i].value == "var") {
+        if (input[i].value == "/" && input[i + 1].value == "*") {
+            i = CreateComment(data, input, i)
+        } else if (input[i].type == "KEYWORD" && input[i].value == "var") {
             i = CreateVariable(data, input, i)
         } else if (input[i].type == "KEYWORD" && input[i].value == "function") {
             i = CreateFunction(data, input, i)
@@ -2016,7 +2044,7 @@ function FuncExpression(FuncJson, input, number) {
     let Expression = []
     let W = number + 1
     while (input[W].value != ";") {
-        if (input[W].type == "IDENTIFIER" || input[W].value == ".") {
+        if (input[W].type == "IDENTIFIER") {
             if (input[W].value.length > 1) {
                 identifer = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
             } else {
@@ -2219,10 +2247,23 @@ function ASTToDesmos(AST, calcstate) {
                         latex: AST[i].body[e].identifer + "=" + AST[i].body[e].value
                     });
                 }
+                if (AST[i].body[e].type == "Comment") {
+                    calcstate.expressions.list.push({
+                        type: "text",
+                        folderId: folderId.toString(),
+                        text: AST[i].body[e].CommentText
+                    });
+                }
                 if (AST[i].body[e].type == "FunctionDeclaration") {
                     FunctionASTToDes(AST[i].body[e], folderId, calcstate)
                 }
             }
+        }
+        if (AST[i].type == "Comment") {
+            calcstate.expressions.list.push({
+                type: "text",
+                text: AST[i].CommentText
+            });
         }
         if (AST[i].type == "VariableDeclarator") {
             calcstate.expressions.list.push({
