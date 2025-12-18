@@ -2076,7 +2076,7 @@ function IfStatement(FuncJson, input, number) {
     let W = number + 2
     while (input[W].value != ")") {
         if (input[W].value !== ",") {
-            if (input[W].value.length > 1 && input[W].type !== "NUMBER") {
+            if (input[W].value.length > 1 && input[W].type == "IDENTIFIER") {
                 arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
             } else {
                 arg = input[W].value
@@ -2122,7 +2122,7 @@ function ElseIfStatement(FuncJson, input, number) {
     let W = number + 3
     while (input[W].value != ")") {
         if (input[W].value !== ",") {
-            if (input[W].value.length > 1 && input[W].type !== "NUMBER") {
+            if (input[W].value.length > 1 && input[W].type == "IDENTIFIER") {
                 arg = input[W].value.slice(0, 1) + "_{" + input[W].value.slice(1) + "}"
             } else {
                 arg = input[W].value
